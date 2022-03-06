@@ -1,0 +1,111 @@
+{extend name="common/base"/}
+<!-- 主体 -->
+{block name="body"}
+<form class="layui-form page-content">
+  <h3 class="h3-title">幻灯片</h3>
+  <table class="layui-table layui-table-form">
+    <tr>
+      <td class="layui-td-gray">标题<font>*</font></td>
+      <td colspan="3">
+        <input type="hidden" name="id" value="{$id}" />
+        <input type="text" name="title" lay-verify="required" lay-reqText="请输入标题" autocomplete="off" placeholder="请输入标题" class="layui-input"
+          {notempty name="$slide_info.title" }value="{$slide_info.title}" {/notempty}>
+      </td>
+      <td class="layui-td-gray" rowspan="3">图片<font>*</font></td>
+      <td rowspan="3" style="vertical-align:top">
+        <div class="layui-upload" style="text-align:center;">
+          <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="test1">选择要上传的图片</button>
+          <div class="layui-upload-list" id="demo1" style="width: 100%;height:100px; overflow:hidden;">
+            <img {notempty name="$slide_info.img" }src="{:get_file($slide_info.img)}" {/notempty}
+              style="max-width: 120px;" />
+            <input type="hidden" lay-verify="required" lay-reqText="请选择要上传的图片" name="img" {notempty name="$slide_info.img" }value="{$slide_info.img}" {/notempty}>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="layui-td-gray">链接</td>
+      <td colspan="3">
+        <input type="text" name="src" autocomplete="off" placeholder="请输入链接" class="layui-input" {notempty
+          name="$slide_info.src" }value="{$slide_info.src}" {/notempty}>
+      </td>
+    </tr>
+    <tr>
+      <td class="layui-td-gray">状态<font>*</font></td>
+      <td>
+        {if condition="$id eq 0"}
+        <input type="radio" name="status" value="1" title="正常" checked>
+        <input type="radio" name="status" value="-1" title="禁用">
+        {else/}
+        <input type="radio" name="status" value="1" title="正常" {eq name="$slide_info.status" value="1" }checked{/eq}>
+        <input type="radio" name="status" value="-1" title="禁用" {eq name="$slide_info.status" value="-1" }checked{/eq}>
+        {/if}
+      </td>
+	  <td class="layui-td-gray">排序</td>
+      <td><input type="text" name="sort" placeholder="请输入排序，数字" autocomplete="off" class="layui-input" {notempty
+          name="$slide_info.sort" }value="{$slide_info.sort}" {/notempty}></td>
+    </tr>
+    <tr>
+      <td class="layui-td-gray">备注</td>
+      <td colspan="5">
+        <textarea name="desc" placeholder="请输入备注" class="layui-textarea">{notempty name="$slide_info.desc" }{$slide_info.desc}{/notempty}</textarea>
+      </td>
+    </tr>
+  </table>
+
+  <div style="padding: 10px 0">
+    <input type="hidden" name="slide_id" value="{$slide_id}">
+    <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">立即提交</button>
+    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+  </div>
+</form>
+{/block}
+<!-- /主体 -->
+
+<!-- 脚本 -->
+{block name="script"}
+<script>
+  function init(layui) {
+    var form = layui.form
+      , layer = layui.layer
+      , upload = layui.upload;
+
+    //头像上传
+    var uploadInst = upload.render({
+      elem: '#test1'
+      , url: '/admin/api/upload'
+      , done: function (res) {
+        //如果上传失败
+        if (res.code == 1) {
+          return layer.msg('上传失败');
+        }
+        //上传成功
+        $('#demo1 input').attr('value', res.data.id);
+        $('#demo1 img').attr('src', res.data.filepath);
+      }
+    });
+
+    //监听提交
+    form.on('submit(webform)', function (data) {
+      $.ajax({
+        url: "/admin/slide/slide_info_add",
+        type: 'post',
+        data: data.field,
+        success: function (e) {
+			layer.msg(e.msg);
+			if (e.code == 0) {
+				parent.tableIns.reload();
+				setTimeout(function(){
+					parent.layui.rightpage.close();
+				},1000);
+			}
+		}
+      })
+      return false;
+    });
+  }
+
+</script>
+{include file="common/layui" base="base" extend="[]" callback="init" /}
+{/block}
+<!-- /脚本 -->

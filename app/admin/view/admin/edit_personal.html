@@ -1,0 +1,93 @@
+{extend name="common/base"/}
+<!-- 主体 -->
+{block name="body"}
+<form class="layui-form body-content">
+	<h3 style="height:36px">修改个人信息</h3>
+	<table class="layui-table layui-table-form">
+		<tr>
+			<td class="layui-td-gray2">用户名 <span style="color: red">*</span></td>
+			<td><input type="text" lay-verify="required" autocomplete="off" placeholder="请输入节点名称" class="layui-input"
+					value="{$admin.username}" disabled></td>
+			<td class="layui-td-gray2" rowspan="3">头像</td>
+			<td rowspan="3">
+				<div class="layui-upload">
+					<button type="button" class="layui-btn  layui-btn-normal" id="test1">上传头像</button>
+					<div class="layui-upload-list" id="demo1">
+						<img src="{$admin.thumb}" width="100" />
+						<input type="hidden" name="thumb" value="{$admin.thumb}">
+					</div>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray2">昵称<span style="color: red">*</span></td>
+			<td>
+				<input type="text" name="nickname" lay-verify="required" placeholder="请输入昵称" lay-reqText="请输入昵称"
+					autocomplete="off" class="layui-input" value="{$admin.nickname}">
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray2">手机</td>
+			<td><input type="text" name="mobile" lay-verify="required" placeholder="请输入手机" autocomplete="off"
+					class="layui-input" value="{$admin.mobile}"></td>
+		</tr>
+	</table>
+	<div style="padding: 10px 0">
+		<button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">立即提交</button>
+		<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	</div>
+</form>
+{/block}
+<!-- /主体 -->
+
+<!-- 脚本 -->
+{block name="script"}
+<script>
+	function init(layui) {
+		var TAB = parent.layui.tab,
+			form = layui.form,
+			layer = layui.layer,
+			upload = layui.upload;
+
+		//头像上传
+		var uploadInst = upload.render({
+			elem: '#test1'
+			, url: '/admin/api/upload'
+			, done: function (e) {
+				//如果上传失败
+				if (e.code == 1) {
+					return layer.msg('上传失败');
+				}
+				else{
+					//上传成功
+					$('#demo1 input').attr('value', e.data.filepath);
+					$('#demo1 img').attr('src', e.data.filepath);
+				}
+			}
+		});
+
+		//监听提交
+		form.on('submit(webform)', function (data) {
+			$.ajax({
+				url: "/admin/api/personal_submit",
+				type: 'post',
+				data: data.field,
+				success: function (e) {
+					if (e.code == 0) {
+						layer.confirm('保存成功,关闭本页面吗?', { icon: 3, title: '提示' }, function (index) {
+							TAB.sonDelete();
+							layer.close(index);
+						});
+					} else {
+						layer.msg(e.msg);
+					}
+				}
+			})
+			return false;
+		});
+	}
+
+</script>
+{include file="common/layui" base='base' extend="[]" callback="init" /}
+{/block}
+<!-- /脚本 -->

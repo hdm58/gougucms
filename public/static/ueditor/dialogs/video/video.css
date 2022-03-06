@@ -1,0 +1,6 @@
+@charset "utf-8";
+.wrapper{ width: 550px;margin: 10px auto; zoom:1;position: relative}
+.tabbody{height: 368px;}
+.tabbody .panel.focus { width: 100%; height: 335px; display: block;}
+#videoUrl { width: 450px; height: 23px;  line-height: 23px;  margin: 8px 5px 5px;  background: #FFF;  border: 1px solid #d7d7d7;}
+#preview{position: relative; width: 520px;padding:2px 10px; overflow: hidden; height: 300px;}

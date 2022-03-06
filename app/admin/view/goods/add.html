@@ -1,0 +1,307 @@
+{extend name="common/base"/}
+<!-- 主体 -->
+{block name="body"}
+<style>
+	.upload-img {
+		width:100px;
+		height:120px;
+		overflow:hidden;
+		position:relative;
+		border:1px solid #eee;
+		padding:1px;
+		margin:5px;
+		float:left;
+	}
+	.upload-close{
+		position:absolute;
+		top:1px;
+		right:1px;
+	}
+.editormd-code-toolbar select{display:inline-block}
+.editormd li{list-style: inherit;}
+</style>
+<form class="layui-form body-table">
+	<div class="layui-form-bar" style="padding-bottom:0">
+		<h3 class="h3-title">创建商品</h3>
+	</div>
+	<table class="layui-table">
+      <tr>
+        <td class="layui-td-gray">商品标题 <span style="color: red">*</span></td>
+        <td colspan="3"><input type="text" name="title" lay-verify="required" lay-reqText="请输入商品标题" placeholder="请输入商品标题" class="layui-input"></td>
+		<td class="layui-td-gray">状态 <span style="color: red">*</span></td>
+        <td>
+          <input type="radio" name="status" value="1" title="正常" checked>
+          <input type="radio" name="status" value="0" title="下架">
+        </td>
+      </tr>
+	  <tr>
+		<td class="layui-td-gray">关键字 <span style="color: red">*</span></td>
+        <td  colspan="3">
+          <input type="text" id="keyword_name" name="keyword_names" lay-verify="required" lay-reqText="请选择关键字" placeholder="请选择关键字" class="layui-input" readonly>
+          <input type="hidden" id="keyword_id" name="keyword_ids">
+        </td>
+        <td class="layui-td-gray">商品分类<span style="color: red">*</span></td>
+        <td>
+          <select name="cate_id" lay-verify="required" lay-reqText="请选择商品分类">
+            <option value="">请选择商品分类</option>
+            {volist name=":set_recursion(get_goods_cate())" id="v"}
+            <option value="{$v.id}">{$v.title}</option>
+            {/volist}
+          </select>
+        </td>
+	  </tr>
+	  <tr>
+        <td class="layui-td-gray">商品卖点 <span style="color: red">*</span></td>
+        <td colspan="3">
+			<input type="text" name="tips" lay-verify="required" lay-reqText="请输入商品卖点" placeholder="一句话描述商品卖点，30字以内" class="layui-input">
+        </td>
+		<td class="layui-td-gray" rowspan="3">缩略图 <span style="color: red">*</span></td>
+        <td rowspan="3" style="vertical-align:top">
+          <div class="layui-upload" style="text-align:center;">
+          <button type="button" class="layui-btn layui-btn-sm" id="test1">上传商品封面图(尺寸：750x560)</button>
+          <div class="layui-upload-list" id="demo1">
+            <img src="" width="100" style="width:200px;max-width:200px"/>
+            <input type="hidden" name="thumb" value="" lay-verify="required" lay-reqText="请上传缩略图">
+          </div>
+          </div>
+        </td>
+      </tr>
+	  <tr>
+        <td class="layui-td-gray" style="vertical-align:top;">商品简介</td>
+        <td colspan="3">
+          <textarea name="desc" placeholder="请输入商品简介，200字以内" class="layui-textarea"></textarea>
+        </td>
+      </tr>
+      <tr>
+        <td class="layui-td-gray">商品标签 <span style="color: red">*</span></td>
+        <td colspan="3">
+          <input type="checkbox" name="tag_values[]" title="正品保证" lay-skin="primary" value="1" checked /> 
+          <input type="checkbox" name="tag_values[]" title="一年保修" lay-skin="primary" value="2" checked />
+          <input type="checkbox" name="tag_values[]" title="七天退换（拆封后不支持）" lay-skin="primary" value="3" />
+          <input type="checkbox" name="tag_values[]" title="赠运费险" lay-skin="primary" value="4" />
+          <input type="checkbox" name="tag_values[]" title="闪电发货" lay-skin="primary" value="5" />
+          <input type="checkbox" name="tag_values[]" title="售后无忧" lay-skin="primary" value="6" />
+        </td>
+      </tr>
+	  <tr>
+		<td class="layui-td-gray">市场价格 <span style="color: red">*</span></td>
+        <td>
+          <input type="text" name="base_price" lay-verify="required|number" lay-reqText="请输入市场价格" placeholder="请输入市场价格" class="layui-input">
+        </td>
+		<td class="layui-td-gray">实际价格 <span style="color: red">*</span></td>
+        <td>
+          <input type="text" name="price" lay-verify="required|number" lay-reqText="请输入实际价格" placeholder="请输入实际价格" class="layui-input">
+        </td>
+		<td class="layui-td-gray">是否包邮 <span style="color: red">*</span></td>
+        <td colspan="5">
+          <input type="radio" name="is_mail" value="1" title="是" checked lay-verify="otherReq" lay-reqText="请选择是否包邮">
+          <input type="radio" name="is_mail" value="0" title="否" lay-verify="otherReq" lay-reqText="请选择是否包邮">
+        </td>
+      </tr>
+	  <tr>
+        <td class="layui-td-gray">首页显示</td>
+        <td>
+          <input type="radio" name="is_home" value="1" title="是" checked>
+          <input type="radio" name="is_home" value="0" title="否">
+        </td>
+	    <td class="layui-td-gray">属性</td>
+        <td>
+          <select name="type">
+                <option value="">请选择属性</option>
+                <option value="1">精华</option>
+                <option value="2">热门</option>
+                <option value="3">推荐</option>
+            </select>
+        </td>
+        <td class="layui-td-gray">排序</td>
+        <td>
+          <input type="text" name="sort" value="0" lay-verify="number" placeholder="请输入排序，数字" class="layui-input">
+        </td>      
+      </tr>
+	  <tr>
+        <td class="layui-td-gray">商品图集</td>
+        <td colspan="5">
+          <div class="layui-upload">
+          <button type="button" class="layui-btn layui-btn-sm" id="test2">上传商品图</button>
+          <div class="layui-upload-list clearfix" id="demo2">
+            <input type="hidden" name="banner" value="">
+          </div>
+          </div>
+        </td>
+      </tr>
+	{eq name="$editor" value="1"}
+      <tr>
+			<td colspan="6" class="layui-td-gray" style="text-align:left">商品介绍<span style="color: red">*</span><span style="margin-left:30px; color: red">当前为ueditor富文本编辑器，可在【系统管理->其他配置】中切换为mardown编辑器</span></td>
+		  </tr>
+		  <tr>
+			<td colspan="6">
+		<textarea name="ueditorcontent" placeholder="请输入内容" class="layui-textarea" id="container" lay-verify="required" lay-reqText="请完善文章内容"
+		style="border:0;padding:0"></textarea>
+		{include file="common/ueditor" id="container" name="ueditorcontent" width="100%" height="500" toolbar="[]" /}
+		</td>
+	  </tr>
+		{else/}
+      <tr>
+			<td colspan="6" class="layui-td-gray" style="text-align:left">商品介绍<span style="color: red">*</span><span style="margin-left:30px; color: red">当前为mardown编辑器，可在【系统管理->其他配置】中切换为ueditor富文本编辑器</span></td>
+		  </tr>
+		  <tr>
+			<td colspan="6">
+		<div>
+			<textarea id="mdContent" style="display:none;"></textarea>
+			<div id="docContent"></div>
+		</div>
+		{include file="common/mdeditor" id="docContent" markdown="mdContent" sub="100" toolbar="[]" /}
+		</td>
+		</tr>
+	{/eq}
+    </table>
+    <div class="layui-form-item" style="padding:10px;">
+      <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">立即提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+      <button lay-event="back" class="layui-btn layui-btn-primary">返回</button>
+    </div>
+</form>
+{/block}
+<!-- /主体 -->
+
+<!-- 脚本 -->
+{block name="script"}
+<script>
+	// 查找指定的元素在数组中的位置
+	Array.prototype.indexOf = function(val) {
+	        for (var i = 0; i < this.length; i++) {
+             if (this[i] == val) {
+                 return i;
+             }
+         }
+         return -1;
+    };
+     // 通过索引删除数组元素
+     Array.prototype.remove = function(val) {
+         var index = this.indexOf(val);
+         if (index > -1) {
+             this.splice(index, 1);
+         }
+    };
+	 
+  function init(layui) {
+    var form = layui.form
+      , layer = layui.layer
+      , tagspicker = layui.tagpicker
+      , upload = layui.upload;
+
+    var tags = new tagspicker({
+      'url': '/admin/api/get_keyword_cate',
+      'target': 'keyword_name',
+      'tag_ids': 'keyword_id',
+      'tag_tags': 'keyword_name',
+      'height': 500,
+      'isDiy': 1
+    });
+
+	//自定义验证规则
+	form.verify({
+		otherReq: function(value,item){
+			var verifyName=$(item).attr('name')
+				, verifyType=$(item).attr('type')
+				,formElem=$(item).parents('.layui-form')//获取当前所在的form元素，如果存在的话
+				,verifyElem=formElem.find('input[name='+verifyName+']')//获取需要校验的元素
+				,isTrue= verifyElem.is(':checked')//是否命中校验
+				,focusElem = verifyElem.next().find('i.layui-icon');//焦点元素
+			if(!isTrue || !value){
+				//定位焦点
+				focusElem.css(verifyType=='radio'?{"color":"#FF5722"}:{"border-color":"#FF5722"});
+				//对非输入框设置焦点
+				focusElem.first().attr("tabIndex","1").css("outline","0").blur(function() {
+					focusElem.css(verifyType=='radio'?{"color":""}:{"border-color":""});
+				}).focus();
+				var reqText = verifyElem.attr('lay-reqText');
+				if(reqText && reqText!=''){
+					return reqText;
+				}
+				else{
+					return '必填项不能为空';
+				}				
+			}
+		}
+    });
+
+	//缩略图上传
+	var uploadInst = upload.render({
+		elem: '#test1'
+		,url: '/admin/api/upload'
+		,done: function(res){
+		  //如果上传失败
+		  if(res.code == 1){
+			return layer.msg('上传失败');
+		  }
+		  //上传成功
+		  $('#demo1 input').attr('value',res.data.id);
+		  $('#demo1 img').attr('src',res.data.filepath);
+		}
+	});
+
+    //广告图上传
+    var uploadInst2 = upload.render({
+      elem: '#test2'
+      ,url: '/admin/api/upload'
+      ,done: function(res){
+        //如果上传失败
+        if(res.code == 1){
+			return layer.msg('上传失败');
+        }
+        //上传成功
+		var idsStr=$('#demo2 input').val();
+		var idsArray=[];
+		if(idsStr!=''){
+			idsArray=idsStr.split(",");
+		}
+		idsArray.push(res.data.id);
+        $('#demo2 input').attr('value',idsArray.join(','));
+		$('#demo2').append('<div class="upload-img" id="uploadImg'+res.data.id+'"><img src="'+ res.data.filepath +'"><div class="upload-close"><a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delimg" data-id="'+res.data.id+'">删除</a></div>');
+      }
+    });
+	  
+	$('#demo2').on('click','[lay-event="delimg"]',function(){
+		var _id=$(this).data('id');
+		var idsStr=$('#demo2 input').val();
+		var idsArray=[];
+		if(idsStr!=''){
+			idsArray=idsStr.split(",");
+		}
+		idsArray.remove(_id);
+		$('#demo2 input').attr('value',idsArray.join(','));
+		$('#uploadImg'+_id).remove();
+	})
+
+    //监听提交
+    form.on('submit(webform)', function (data) {
+      $.ajax({
+        url: "/admin/goods/add",
+        type: 'post',
+        data: data.field,
+        success: function (e) {
+          if (e.code == 0) {
+            layer.confirm('保存成功,返回列表页吗?', { icon: 3, title: '提示' }, function (index) {
+              window.location.href="/admin/goods/index.html";
+              layer.close(index);
+            });
+          } else {
+            layer.msg(e.msg);
+          }
+        }
+      })
+      return false;
+    });
+    //监听返回
+    $('.body-table').on('click', '[lay-event="back"]', function () {
+      window.location.href="/admin/goods/index.html";
+      return false;
+    });
+
+  }
+
+</script>
+{include file="common/layui" base='base' extend="['tagpicker']" callback="init" /}
+{/block}
+<!-- /脚本 -->

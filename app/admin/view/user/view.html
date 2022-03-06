@@ -1,0 +1,133 @@
+{extend name="common/base"/}
+<!-- 主体 -->
+{block name="body"}
+<div class="layui-form body-table">
+	<h3 style="font-weight:600; padding:10px">用户信息</h3>
+	<table class="layui-table layui-table-form">
+		<tr>
+			<td class="layui-td-gray">登录账号</td>
+			<td>
+				{$user.username}
+			</td>
+			<td class="layui-td-gray">会员等级</td>
+			<td>
+				{$user.level_name}
+			</td>
+			<td rowspan="4" class="layui-td-gray">头像</td>
+			<td rowspan="4" valign="top" style="width: 150px;">
+				<div class="layui-upload">
+					<img src="{$user.headimgurl}" width="150" height="150" style="max-width: 100%;" />
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">注册时间</td>
+			<td>
+				{$user.register_time | date='Y-m-d H:i:s'}
+			</td>
+			<td class="layui-td-gray">注册IP</td>
+			<td>
+				{$user.register_ip}
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">真实姓名</td>
+			<td>
+				{$user.name}
+			</td>
+			<td class="layui-td-gray">状态</td>
+			<td>
+				{eq name="$user.status" value="1" }正常{/eq}
+				{eq name="$user.status" value="0" }禁止登录{/eq}
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">手机号码</td>
+			<td>
+				{$user.mobile}
+			</td>
+			<td class="layui-td-gray">电子邮箱</td>
+			<td>
+				{$user.email}
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">昵称</td>
+			<td>
+				{$user.nickname}
+			</td>
+			<td class="layui-td-gray">性别</td>
+			<td>
+				{eq name="$user.sex" value="1" }男{/eq}
+				{eq name="$user.sex" value="2" }女{/eq}
+				{eq name="$user.sex" value="0" }未知{/eq}
+			</td>
+			<td class="layui-td-gray">生日</td>
+			<td>
+				{$user.birthday | date='Y-m-d'}
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">个人简介</td>
+			<td colspan="5">
+				{$user.desc}
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">所在企业</td>
+			<td>
+				{$user.company}
+			</td>
+			<td class="layui-td-gray">所在部门</td>
+			<td>
+				{$user.depament}
+			</td>
+			<td class="layui-td-gray">所在职位</td>
+			<td>
+				{$user.position}
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">企业地址</td>
+			<td colspan="5">
+				{$user.address}
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">最后登录IP</td>
+			<td>
+				{$user.last_login_ip}
+			</td>
+			<td class="layui-td-gray2">最后登录时间</td>
+			<td>
+				{$user.last_login_time | date='Y-m-d H:i:s'}
+			</td>
+			<td class="layui-td-gray2">累计登录次数</td>
+			<td>
+				{$user.login_num}
+			</td>
+		</tr>
+	</table>
+
+	<div style="padding: 10px">
+		<button lay-event="back" class="layui-btn layui-btn-primary">关闭</button>
+	</div>
+</div>
+{/block}
+<!-- /主体 -->
+
+<!-- 脚本 -->
+{block name="script"}
+<script>
+	function init(layui) {
+		var TAB = parent.layui.tab;
+		//监听返回
+		$('.body-table').on('click', '[lay-event="back"]', function () {
+			TAB.sonDelete();
+			return false;
+		});
+	}
+</script>
+{include file="common/layui" base="base" extend="[]" callback="init" /}
+{/block}
+<!-- /脚本 -->

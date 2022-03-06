@@ -1,0 +1,99 @@
+{extend name="common/base"/}
+<!-- 主体 -->
+{block name="body"}
+<div class="body-table">
+	<form class="layui-form layui-form-bar">
+		<div class="layui-input-inline" style="width:300px;">
+			<input type="text" name="keywords" placeholder="昵称/操作数据id/操作描述" class="layui-input" autocomplete="off" />
+		</div>
+		<div class="layui-input-inline">
+			<select name="action">
+				<option value="">请选择类型</option>
+				{volist name="$type_action" id="vo"}
+				<option value="{$vo}">{$vo}</option>
+				{/volist}
+			</select>
+		</div>
+		<button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">提交搜索</button>
+	</form>
+	<table class="layui-hide" id="test" lay-filter="test"></table>
+</div>
+{/block}
+<!-- /主体 -->
+
+<!-- 脚本 -->
+{block name="script"}
+<script>
+	function init(layui) {
+		var table = layui.table,
+			form = layui.form;
+
+		var tableIns = table.render({
+			elem: '#test',
+			title: '用户操作日志列表',
+			toolbar: '#toolbarDemo',
+			url: '/admin/user/log', //数据接口
+			page: true, //开启分页
+			limit: 20,
+			cols: [
+				[
+					{
+						field: 'id',
+						title: 'ID号',
+						align: 'center',
+						width: 80
+					}, {
+						field: 'title',
+						title: '操作类型',
+						align: 'center',
+						width: 90
+					}, {
+						field: 'content',
+						title: '操作描述',
+						width: 360
+					},{
+						field: 'param_id',
+						title: '操作数据ID',
+						align: 'center',
+						width: 100
+					}, {
+						field: 'param',
+						title: '操作数据'
+					}, {
+						field: 'nickname',
+						title: '昵称',
+						align: 'center',
+						width: 120
+					}, {
+						field: 'ip',
+						title: 'IP地址',
+						align: 'center',
+						width: 150
+					}, {
+						field: 'create_time',
+						title: '操作时间',
+						align: 'center',
+						width: 160
+					}
+				]
+			]
+		});
+
+		//监听搜索提交
+		form.on('submit(webform)', function (data) {
+			tableIns.reload({
+				where: {
+					keywords: data.field.keywords,
+					action: data.field.action
+				},
+				page: {
+					curr: 1
+				}
+			});
+			return false;
+		});
+	}
+</script>
+{include file="common/layui" base="base" extend="[]" callback="init" /}
+{/block}
+<!-- /脚本 -->

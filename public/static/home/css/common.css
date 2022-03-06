@@ -1,0 +1,226 @@
+/*reset*/
+body {margin:0; padding:0; font-size:12px ; color:#323232; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji","Microsoft YaHei",tahoma,arial,"\5B8B\4F53"; font-weight:normal!important; background-color: #F5F5F5;}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,blockquote,p{padding:0; margin:0;}   
+table,td,tr,th{font-size:12px;}
+li{list-style-type:none;}
+img{vertical-align:top;border:0;}
+ol,ul {list-style:none;}
+h1,h2,h3,h4,h5,h6 {font-size:14px;}
+address,code,em,th,s,i{font-weight:normal; font-style:normal;}
+s{color:#909090; margin:0 10px; text-decoration:none;}
+
+/*form*/
+label input{vertical-align:middle; margin-right:3px;}
+label{cursor:pointer;}
+textarea{resize:none;font-size:12px;}
+:focus {outline: 0;}
+select{padding:4px 5px;border:1px solid #cbcbcb; border-radius:2px; margin-right:3px;}
+
+/*font-size*/
+.fB{font-weight:bold;}
+.f12{font-size:12px;}
+.f14{font-size:14px;}
+.f16{font-size:16px;}
+.f18{font-size:16px;}
+
+/*float*/
+.l,.left{float:left;}
+.r,.right{float:right;}
+.clearfix {display: block;}
+.clearfix:after{content:"."; display:block; height:0; clear:both;visibility:hidden;}
+* html .clearfix { height: 1%;}
+
+/*scrollbar*/
+::-webkit-scrollbar{width:3px;height:6px;}
+::-webkit-scrollbar-button:vertical{display:none;}
+::-webkit-scrollbar-track:vertical{background-color:black;}
+::-webkit-scrollbar-track-piece{background-color:#F5F5F5;}
+::-webkit-scrollbar-thumb:vertical{margin-right:6px; background-color:#bbb;}
+::-webkit-scrollbar-thumb:vertical:hover{background-color:#aaa;}
+::-webkit-scrollbar-corner:vertical{background-color:#535353;}
+/*placeholder*/
+::-webkit-input-placeholder { /* WebKit browsers */
+  color: #aaa;font-size: 14px;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+  color: #aaa; font-size: 14px;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+  color: #aaa; font-size: 14px;
+}
+
+/*display*/
+.hide{display:none;}
+.block{display:block;}
+
+/*a*/
+a {color:#323232; text-decoration:none;}
+a:visited {text-decoration:none;}
+a:hover {color:#4385F5; transition: all 0.5s;}
+a:active {color:#4385F5;}
+
+/*省略行数*/
+.text-overflow-1,.text-overflow-2,.text-overflow-3,.text-overflow-4,.text-overflow-5{display: -webkit-box !important;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ word-break: break-all;
+ -webkit-box-orient: vertical;
+ -webkit-line-clamp: 1;
+}
+.text-overflow-2{-webkit-line-clamp: 2;}
+.text-overflow-3{-webkit-line-clamp: 3;}
+.text-overflow-4{-webkit-line-clamp: 4;}
+.text-overflow-5{-webkit-line-clamp: 4;}
+
+/*----------------导航-----------------*/
+.nav{width:100%; height:60px;position: fixed; left:0; top:0; z-index: 999; box-shadow: 0 5px 8px 0 rgba(0,0,0,.1); background: rgba(255,255,255,.95);}
+.nav-box{width:1226px; margin:0 auto;}
+.nav-logo{width:220px; height:60px;}
+.nav-logo a{width:210px; height:60px; display:block;}
+
+.nav-menu{font-size:16px;}
+.nav-menu li{height:60px; float:left; color:#fff; padding: 0 15px;}
+.nav-menu li a.nav-a{height:60px; position: relative; min-width:36px; text-align:center; line-height:60px; padding:0 3px; display:inline-block; color:#323232;transition: all 0.6s ;}
+.nav-menu li a.nav-a:hover{color:#186AF2; transition: all 0.6s;}
+.nav-menu li.on a.nav-a{color:#186AF2}
+
+.nav-menu li.nav-login{position:relative; padding-left:20px; padding-right: 0;}
+.nav-menu li.nav-login a.nav-a{padding:0 2px; margin-left:5px}
+.nav-menu li.nav-login span{padding:5px 16px 6px; border-radius:3px; font-size:14px; background-color:#186AF2; color:#fff}
+.nav-menu li.nav-login span.reg-span{background-color:#EA4335;}
+.nav-menu li a.nav-a:hover{color:#186AF2; transition: all 0.6s;}
+.nav-menu li.on a.nav-a{color:#186AF2}
+.nav-menu li.nav-login a:hover span{opacity:0.8;transition: all 0.5s;}
+.nav-menu li.on a.nav-a:after { position: absolute;  bottom: -1px;  left: 0;  content: '';  height: 3px;  width: 100%;  background-color: #186AF2;}
+
+.nav-login-box{width:320px; border-radius:2px; position:absolute; top:60px; right:0; background-color:#fff; z-index:-1; color:#333; font-size:14px;-webkit-transform:scale(0.5);transform:scale(0.5);-webkit-transition:.2s;transition:.2s;opacity:0;-webkit-transform-origin:center top;transform-origin:center top;-webkit-box-shadow:0 15px 30px rgba(0,0,0,.2);box-shadow:0 15px 30px rgba(0,0,0,.2);}
+.login-note{padding: 15px 15px 0; color: #FF5722;}
+.nav-login-box .login-menu{padding:15px 10px;}
+.nav-menu .login-menu a{width:76px; color:#333; padding:10px; display:inline-block; font-size:15px;}
+.nav-login-box .login-menu-bottom{background-color:#f2f2f2; padding:9px 20px; border-top:1px solid #eee;}
+.nav-login-box .login-menu-bottom a{color:#666; font-size:12px;}
+.nav-menu li.nav-logined .nav-login-box:after {content: '';display: block;width: 20px; height: 20px;background-color: #fff; position: absolute; top: -5px;right: 30px;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+.nav-menu li a.nav-img{height:32px; text-align:center; padding:14px 20px; display:block; line-height: 32px; font-size: 16px;}
+.nav-img img{width:30px; height:30px; border-radius:50%; border:1px solid #fff; margin-right: 6px;}
+.nav-menu li.nav-logined:hover .nav-login-box{z-index:99;-webkit-transform:scale(1);transform:scale(1);opacity:1;}
+
+/*----------------页脚-----------------*/
+.footer{width:100%; background-color:#1c1a1d;}
+.footer-top{width:100%; background:url(../images/footer.jpg) no-repeat center bottom; background-size: 100% auto;}
+.footer-top-box{width:1200px; margin:0 auto; color:#888;}
+.footer-bottom{width:100%; background-color:#151515;height:36px; overflow:hidden; }
+.footer-bottom-box{width:1200px; line-height:36px; margin:0 auto; color:#888;}
+.footer-bottom-box .a{margin-left:10px; color:#bbb;}
+.footer-bottom-box .r{color:#bbb;}
+
+.footer-link{padding:50px 0; padding-right:160px;}
+.footer-link dt{font-size:18px; height:48px; line-height: 36px; color:#bbb;}
+.footer-link dt a{color:#bbb;}
+.footer-link dd{font-size:14px; line-height:32px;}
+.footer-link a{color:#888;}
+.footer-link a:hover{color:#36a0ff;}
+
+.footer-about{padding:50px 0;}
+.footer-about dt{font-size:18px; height:48px; line-height: 36px; color:#bbb;}
+.footer-about dd{line-height:32px; font-size:14px;}
+.footer-about a{line-height:27px;color:#909090; }
+.footer-about a:hover{color:#fff; }
+
+/*----------------分页-----------------*/
+.pagebox{width:100%; text-align:center; font-size:14px;}
+.pagebox a,.pagebox span{min-width:16px; height:33px; line-height:33px;  margin:0 4px; padding:0 10px; color:#333; border-radius:1px; text-align:center; border:1px solid #ddd; background-color:#fff; display:inline-block;}
+.pagebox a:hover,.pagebox span{background-color:#d79c00; color:#fff; border:1px solid #d79c00;}
+.data-none{padding:30px 0; text-align: center; color:#999;}
+/*----------------动画---------------*/
+.fadeIn {
+	-webkit-animation-name: fadeIn;
+	animation-name: fadeIn;
+	-webkit-animation-duration: .3s;
+	animation-duration: .3s;
+	-webkit-animation-fill-mode: both;
+	animation-fill-mode: both;
+}
+@-webkit-keyframes fadeIn{
+  0% {
+		opacity: 0;
+	}
+  100% {
+		opacity: 1;
+	}
+}
+@keyframes fadeIn{
+  0% {
+		opacity: 0;
+	}
+  100% {
+		opacity: 1;
+	}
+}
+
+.fadeInUp {
+	-webkit-animation-name: fadeInUp;
+	animation-name: fadeInUp;
+	-webkit-animation-duration: .6s;
+	animation-duration: .6s;
+	-webkit-animation-fill-mode: both;
+	animation-fill-mode: both;
+}
+@-webkit-keyframes fadeInUp {
+  0% {
+		opacity: 0;
+		-webkit-transform: translate3d(0, 10px, 0);
+		transform: translate3d(0, 10px, 0);
+	}
+  100% {
+		opacity: 1;
+		-webkit-transform: none;
+		transform: none;
+	}
+}
+@keyframes fadeInUp {
+  0% {
+		opacity: 0;
+		-webkit-transform: translate3d(0, 10px, 0);
+		transform: translate3d(0, 10px, 0);
+	}
+  100% {
+		opacity: 1;
+		-webkit-transform: none;
+		transform: none;
+	}
+}
+@-webkit-keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -10px, 0);
+    transform: translate3d(0, -10px, 0);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -10px, 0);
+    transform: translate3d(0, -10px, 0);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+.fadeInDown {
+   -webkit-animation-name: fadeInDown;
+   animation-name: fadeInDown;
+   -webkit-animation-duration: .8s;
+   animation-duration: .8s;
+   -webkit-animation-fill-mode: both;
+   animation-fill-mode: both;
+}

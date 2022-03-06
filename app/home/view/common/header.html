@@ -1,0 +1,43 @@
+<div class="nav">
+	<div class="nav-box">
+		<div class="l nav-logo">
+			<a href="/"><img src="{__IMG__}/logo.png" height="60" alt="勾股BI" /></a>
+		</div>
+		<div class="r nav-menu">
+			<ul>
+				{volist name="COMMON_NAV" id="vo"}
+				<li {if condition="strpos($vo.param,$params.action) nheq false"}class="on"{/if}><a class="nav-a" href="{$vo.src}" {eq name="vo.target" value="1"} target="_blank"{/eq}>{$vo.title}</a></li>
+				{/volist}
+				<li class="{$login_class}">
+					{:htmlspecialchars_decode($login_top)}
+					<div class="nav-login-box">
+						<div class="login-menu">
+							<a href="/home/user/index">个人中心</a>
+						</div>
+						<div class="login-menu-bottom clearfix">
+							<a class="l" href="/home/user/index">个人设置</a>
+							<a class="r" href="javascript:;" data-node="logout">退出</a>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<script>
+		$('[data-node="logout"]').on("click", function () {
+			layer.confirm('确认注销登录吗?', { icon: 7, title: '警告' }, function (index) {
+				$.ajax({
+					url: '/home/login/login_out',
+					success: function (res) {
+						layer.msg(res.msg);
+						if (res.code == 0) {
+							setTimeout(function () {
+								location.href = "{:url('/')}"
+							}, 1000)
+						}
+					}
+				})
+			})
+		})
+	</script>
+</div>

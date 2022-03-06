@@ -1,0 +1,99 @@
+{extend name="common/base"/}
+<!-- 主体 -->
+{block name="body"}
+<form class="layui-form page-content">
+	<h3 class="h3-title">导航内容</h3>
+	<table class="layui-table layui-table-form">
+		<tr>
+			<td class="layui-td-gray">父级导航<font>*</font></td>
+			<td>
+				<input type="hidden" name="id" value="{$id}"/>
+				<input type="hidden" name="nav_id" value="{$nav_id}"/>
+				<select name="pid" lay-verify="required" lay-reqText="请选择父级导航" >
+					<option value="0">作为顶级导航</option>
+					{volist name=":set_recursion(get_nav($nav_id))" id="v"}
+						<option value="{$v.id}" {eq name="pid" value="$v.id" }selected="" {/eq}>{$v.title} </option>
+					{/volist}
+				</select>
+			</td>
+			<td class="layui-td-gray">排序</td><td>
+				<input type="text" name="sort" autocomplete="off" class="layui-input" {notempty name="$nav.sort" }value="{$nav.sort}"{else/}value="0" {/notempty}>
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">导航名称<font>*</font></td>
+			<td>
+				<input type="text" name="title" lay-verify="required" autocomplete="off" placeholder="请输入名称" lay-reqText="请输入名称" class="layui-input" {notempty name="$nav.title" }value="{$nav.title}"{/notempty}>
+			</td>
+			<td class="layui-td-gray">网址链接</td>
+			<td>
+				<input type="text" name="src" placeholder="请输入导航网址链接，可空" autocomplete="off" class="layui-input" {notempty name="$nav.src" }value="{$nav.src}"{/notempty}>
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">参数</td>
+			<td>
+				<input type="text" name="param" placeholder="请输入导航参数，可空" autocomplete="off" class="layui-input" {notempty name="$nav.param" }value="{$nav.param}"{/notempty}>
+			</td>
+			<td class="layui-td-gray2">是否新窗口打开</td>
+			<td>
+				{if condition="$id eq 0"}
+				<input type="radio" name="target" value="0" title="否" checked>
+				<input type="radio" name="target" value="1" title="是">
+				{else/}
+				<input type="radio" name="target" value="0" title="否" {eq name="$nav.target" value="0" }checked{/eq}>
+				<input type="radio" name="target" value="1" title="是" {eq name="$nav.target" value="1" }checked{/eq}>
+				{/if}				
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray2">状态<font>*</font></td>
+			<td colspan="3">
+				{if condition="$id eq 0"}
+				<input type="radio" name="status" value="1" title="正常" checked>
+				<input type="radio" name="status" value="-1" title="禁用">
+				{else/}
+				<input type="radio" name="status" value="1" title="正常" {eq name="$nav.status" value="1" }checked{/eq}>
+				<input type="radio" name="status" value="-1" title="禁用" {eq name="$nav.status" value="-1" }checked{/eq}>
+				{/if}
+			</td>
+		</tr>
+	</table>
+
+	<div style="padding: 10px 0">
+		<button class="layui-btn" lay-submit="" lay-filter="webform">立即提交</button>
+		<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	</div>
+</form>
+{/block}
+<!-- /主体 -->
+
+<!-- 脚本 -->
+{block name="script"}
+<script>
+	function init(layui) {
+		var form = layui.form,
+			layer = layui.layer;
+
+		//监听提交
+		form.on('submit(webform)', function(data) {
+			$.ajax({
+				url: "/admin/nav/nav_info_add",
+				type: 'post',
+				data: data.field,
+				success: function (e) {
+					layer.msg(e.msg);
+					if (e.code == 0) {
+						window.setTimeout(function(){
+							parent.location.reload();
+						},1000);
+					}
+				}
+			})
+			return false;
+		});
+	}
+</script>
+{include file="common/layui" base="base" extend="[]" callback="init" /}
+{/block}
+<!-- /脚本 -->

@@ -1,0 +1,506 @@
+{extend name="common/base"/}
+
+{block name="style"}
+<style type="text/css">
+	.table-title {
+		font-size: 18px;
+		font-weight: 800;
+		padding: 15px 15px 0;
+	}
+	.panel-num table {
+		width: 100%;
+	}
+	.panel-num td {
+		text-align: center;
+		padding: 20px 0;
+		width: 20%;
+		border-bottom: 1px solid #eee;
+		border-left: 1px solid #eee
+	}
+
+	.panel-num .num-title {
+		padding-bottom: 10px;
+		color: #999;
+	}
+
+	.panel-num .num-num {
+		font-size: 28px;
+		font-weight: 300;
+		color: #009688;
+	}
+
+	.layui-timeline-title {
+		padding-bottom: 0;
+	}
+
+	.layui-timeline-item {
+		padding-bottom: 1px;
+	}
+
+	.layui-timeline-title span {
+		color: #999
+	}
+	.layui-timeline{
+		padding-bottom: 30px;
+	}
+	.panel-more {
+		width: 100%;
+		height: 48px;
+		line-height: 48px;
+		text-align: center;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+	}
+
+	.panel-more a {
+		color: #0088FF
+	}
+</style>
+{/block}
+<!-- 主体 -->
+{block name="body"}
+
+<div class="layui-row layui-col-space10">
+	<div class="layui-col-md8">
+		<div class="layui-row layui-col-space10">
+			<div class="layui-col-md12">
+				<div class="layui-card panel-num">
+					<table>
+						<tr>
+						  <td>
+							<div class="num-title">系统用户</div>
+							<div class="num-num">{$adminCount}</div>
+						  </td>
+						  <td>
+							<div class="num-title">注册用户</div>
+							<div class="num-num">{$userCount}</div>
+						  </td>
+						  <td>
+							<div class="num-title">文章</div>
+							<div class="num-num">{$articleCount}</div>
+						  </td>
+						  <td>
+							<div class="num-title">商品</div>
+							<div class="num-num">{$goodsCount}</div>
+						  </td>
+						  <td>
+							<div class="num-title">附件</div>
+							<div class="num-num">{$fileCount}</div>
+						  </td>
+						</tr>
+					</table>
+				</div>
+				<div class="layui-card">
+					<div class="table-title">注册用户</div>
+					<div style="padding: 15px;">
+						<table id="UserList" lay-filter="UserList" class="layui-hide"></table>
+					</div>
+				</div>
+				<div class="layui-card">
+					<div class="table-title">文章列表</div>
+					<div style="padding: 15px;">
+						<table id="Article" lay-filter="Article" class="layui-hide" style="margin-top:0"></table>
+					</div>
+				</div>
+				<div class="layui-card">
+					<div id="chartView" style="width: 100%;height:300px;"></div>
+				</div>
+				<div class="layui-card">
+					<div id="chartYear" style="width: 100%;height:240px;"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="layui-col-md4">
+		<div class="layui-card">
+			<div class="table-title">系统信息</div>
+			<div class="layui-card-body">
+				<table class="layui-table" lay-skin="" lay-size="sm">
+					{if condition="($install == true)"}
+					<tr>
+						<td colspan="2" style="color: #E94335;">提醒：发现app目录下的install文件夹没删除，为了系统的安全,请手动去删除。</td>
+					</tr>
+					{/if}
+					<tr>
+						<td><b>服务器系统</b></td>
+						<td>{:get_system_info('os')}</td>
+					</tr>
+					<tr>
+						<td><b>PHP版本</b></td>
+						<td>{:get_system_info('php')}</td>
+					</tr>
+					<tr>
+						<td><b>勾股CMS版本</b></td>
+						<td>{:CMS_VERSION}<a class="layui-badge layui-bg-blue" style="margin-left:20px"
+							href="https://blog.gougucms.com/home/book/detail/bid/1.html" target="_blank">勾股CMS文档</a></td>
+					</tr>
+					<tr>
+						<td><b>ThinkPHP版本</b></td>
+						<td>{:TP_VERSION}<a class="layui-badge layui-bg-blue" style="margin-left:20px"
+								href="https://www.kancloud.cn/manual/thinkphp6_0" target="_blank">TP6文档</a></td>
+					</tr>
+					<tr>
+						<td><b>Layui版本</b></td>
+						<td>{:LAYUI_VERSION}<a class="layui-badge layui-bg-blue" style="margin-left:20px"
+								href="https://www.layui.site/doc/" target="_blank">Layui文档</a></td>
+					</tr>
+					<tr>
+						<td><b>上传附件限制</b></td>
+						<td>{:get_system_info('upload_max_filesize')}</td>
+					</tr>
+					<tr>
+						<td><b>执行时间限制</b></td>
+						<td>{:get_system_info('max_execution_time')}</td>
+					</tr>
+					<tr>
+						<td><b>BUG反馈</b></td>
+						<td><a href="mailto:hdm58@qq.com" target="_blank">hdm58@qq.com</a></td>
+					</tr>
+					<tr>
+						<td><b>QQ交流群</b></td>
+						<td>24641076</td>
+					</tr>
+					<tr>
+						<td><b>同系列开源软件</b></td>
+						<td><a class="layui-badge layui-bg-blue" style="margin-right:20px" href="https://gitee.com/gougucms/blog" target="_blank">勾股BLOG</a><a class="layui-badge layui-bg-blue" style="margin-right:20px" href="https://gitee.com/gougucms/office" target="_blank">勾股OA</a></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="layui-card">
+			<div class="table-title">操作日志</div>
+			<div class="layui-card-body">
+				<ul class="layui-timeline" id="logs"></ul>
+				<div class="panel-more"><a href="/admin/api/log_list/">查看更多日志</a></div>
+			</div>
+		</div>
+	</div>
+</div>
+{/block}
+<!-- /主体 -->
+
+<!-- 脚本 -->
+{block name="script"}
+<script src="https://cdn.staticfile.org/echarts/5.3.0/echarts.min.js"></script>
+<script>
+	function getLogs() {
+		$.ajax({
+			url: "/admin/api/get_log_list",
+			type: 'post',
+			data: {
+				page: 1,
+				limit: 20
+			},
+			success: function (e) {
+				if (e.code == 0) {
+					var html = '';
+					$.each(e.data, function (key, value) {
+						html += '<li class="layui-timeline-item">\
+										<i class="layui-icon layui-timeline-axis"></i>\
+										<div class="layui-timeline-content layui-text">\
+										  <div class="layui-timeline-title"><span title="'+ value.id + '">' + value.times + '</span>，' + value.content + '</div>\
+										</div>\
+									  </li>';
+					});
+					$('#logs').html(html);
+				}
+			}
+		})
+	}
+
+	function init(layui) {
+		var layer = layui.layer, table = layui.table;
+		getLogs();
+		//注册用户
+		table.render({
+			elem: '#UserList'
+			, url: '/admin/api/get_user_list' //数据接口
+			, page: false //开启分页
+			, cols: [[ //表头
+				{ field: 'username', title: '用户名'}
+				,{ field: 'username', title: '昵称', align: 'center', 'width': 120}
+				,{ field: 'sex', title: '性别','width': 60, align: 'center', templet: function (d) {
+						let str='-';
+						if(d.sex==1){
+							str='男';
+						}
+						else if(d.sex==2){
+							str='女';
+						}
+						return str;
+					}}
+				, {
+					field: 'headimgurl', title: '头像', align: 'center','width': 60, templet: function (d) {
+						return '<img src="' + d.headimgurl + '" width="20" height="20" />';
+					}
+				}
+				, { field: 'login_num', title: '登录次数', align: 'center','width': 100}
+				, { field: 'last_login_time', title: '最后登录时间', align: 'center','width': 168}
+			]]
+		});
+
+		//文章
+		table.render({
+			elem: '#Article'
+			, url: '/admin/api/get_article_list' //数据接口
+			, page: false //开启分页
+			, cols: [[ //表头
+				{ field: 'title', title: '文章标题'}
+				, { field: 'cate_title', title: '文章分类', align: 'center','width': 150 }
+				, { field: 'read', title: '访问量', align: 'center','width': 100 }
+				, { field: 'create_time', title: '发布时间', align: 'center','width': 168}
+			]]
+		});
+		get_view_data();
+	}
+
+
+	function setHour(num) {
+		var str = num + ':00';
+		if (num < 10) {
+			str = '0' + num + ':00';
+		}
+		return str;
+	}
+	var chartView = echarts.init(document.getElementById('chartView'));
+	function get_view_data() {
+		$.ajax({
+			url: "/admin/api/get_view_data",
+			type: 'post',
+			data: {},
+			success: function (e) {
+				if (e.code == 0) {
+					var data_first = e.data.data_first;
+					var data_second = e.data.data_second;
+					archiveCalendar = e.data.data_three;
+					var myDate = new Date();
+					var nowHour = myDate.getHours(); //获取当前小时数(0-23)
+					var xData = [];
+					var yData1 = [];
+					var yData2 = [];
+					$.each(data_first, function (key, value) {
+						if (key <= nowHour) {
+							yData1.push(value);
+						}
+					});
+					$.each(data_second, function (key, value) {
+						xData.push(setHour(key));
+						yData2.push(value);
+					});
+					var ops = {
+						title: {
+							top: '15px',
+							text: '今日与昨日访问统计',
+							left: '12px',
+							textStyle: {
+								fontSize: '18',
+								color: '#333',
+							}
+						},
+						color: ["#1AAD19", "#1890FF"],
+						grid: {
+							left: '20px',
+							right: '30px',
+							bottom: '15px',
+							top: '60px',
+							containLabel: true
+						},
+						tooltip: {
+							trigger: 'axis',
+							axisPointer: {
+								type: 'cross',
+								crossStyle: {
+									color: '#999'
+								}
+							}
+						},
+						toolbox: {
+							show: true,
+						},
+						legend: {
+							data: ["今日", "昨日"],
+							top: '18px',
+						},
+						xAxis: [{
+							type: "category",
+							boundaryGap: !1,
+							data: xData,
+							axisLine: {
+								lineStyle: {
+									color: '#999999',
+									width: 1,
+								}
+							},
+						}],
+						yAxis: [{
+							type: "value",
+							axisLine: {
+								show: true,
+								lineStyle: {
+									color: '#999999',
+									width: 1,
+								}
+							},
+						}],
+						series: [{
+							name: "今日",
+							type: "line",
+							smooth: !0,
+							itemStyle: {
+								normal: {
+									areaStyle: {
+										type: "default",
+										opacity: 0.2
+									}
+								}
+							},
+							data: yData1
+						}, {
+							name: "昨日",
+							type: "line",
+							smooth: !0,
+							itemStyle: {
+								normal: {
+									areaStyle: {
+										type: "default",
+										opacity: 0.2
+									}
+								}
+							},
+							data: yData2
+						}]
+					}
+					chartView.setOption(ops);
+
+
+					let myChart = echarts.init(document.getElementById('chartYear'));
+					let option = {
+						title: {
+							top: '15px',
+							text: '近一年访问统计',
+							left: '12px',
+							textStyle: {
+								fontSize: '18',
+								color: '#333',
+							}
+						},
+						tooltip: {
+							padding: 6,
+							formatter: function (obj) {
+								var value = obj.value;
+								return '<div style="font-size: 12px;">' + value[0] + '：' + value[1] + ' 个访客</div>';
+							}
+						},
+						visualMap: {
+							min: 0,
+							max: 300,
+							show: false,
+							inRange: {
+								color: ['#fafafa', '#1AAD19']
+							}
+						},
+						calendar: {
+							top: 75,
+							left: 52,
+							right: 20,
+							range: getRange(),
+							cellSize: ['auto', 21],
+							splitLine: {
+								lineStyle: {
+									color: '#aaa',
+									type: 'dashed'
+								}
+							},
+							itemStyle: {
+								borderWidth: 0.5
+							},
+							yearLabel: { show: false },
+							monthLabel: {
+								nameMap: 'cn',
+								fontSize: 12
+							},
+							dayLabel: {
+								show: true,
+								formatter: '{start}  1st',
+								fontWeight: 'lighter',
+								nameMap: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+								fontSize: 12
+							}
+						},
+						series: [{
+							type: 'heatmap',
+							coordinateSystem: 'calendar',
+							calendarIndex: 0,
+							data: getDay()
+						}]
+					};
+					myChart.setOption(option);
+
+					setTimeout(function () {
+						window.onresize = function () {
+							chartView.resize();
+							myChart.resize();
+						}
+					})
+					console.log(e.data);
+				}
+			}
+		})
+
+		var archiveCalendar = {};
+		function getRange() {
+			let today = new Date();
+			let tYear = today.getFullYear();
+			let tMonth = today.getMonth() + 1;
+			let tDate = today.getDate();
+			let dateFirst = tYear + "-" + tMonth + "-" + tDate;
+			let datelast = (tYear - 1) + "-" + tMonth + "-" + tDate;
+			let dataRange = [];
+			dataRange.push(dateFirst);
+			dataRange.push(datelast);
+			return dataRange;
+		}
+
+		function getDay() {
+			var today = new Date();
+			var dayArray = [];
+			for (var i = 0; i < 366; i++) {
+				var targetday_milliseconds = today.getTime() - 1000 * 60 * 60 * 24 * i;
+				var date = new Date(targetday_milliseconds);
+				dayArray.push(retunDay(date));
+			}
+			return dayArray;
+		}
+
+		function retunDay(day) {
+			var tYear = day.getFullYear();
+			var tMonth = day.getMonth();
+			var tDate = day.getDate();
+			tMonth = tMonth + 1;
+			if (tMonth.toString().length == 1) {
+				tMonth = "0" + tMonth;
+			}
+			if (tDate.toString().length == 1) {
+				tDate = "0" + tDate;
+			}
+			var dateStr = tYear + "-" + tMonth + "-" + tDate;
+			var dateArray = [];
+			dateArray.push(dateStr);
+			if (archiveCalendar[dateStr]) {
+				dateArray.push(archiveCalendar[dateStr]);
+			}
+			else {
+				dateArray.push(0);
+			}
+			return dateArray;
+		}
+
+
+
+	}
+
+</script>
+{include file="common/layui" base='base' extend="[]" callback="init" /}
+{/block}
+<!-- /脚本 -->

@@ -1,0 +1,132 @@
+{extend name="common/base"/}
+<!-- 主体 -->
+{block name="body"}
+<form class="layui-form body-table">
+	<h3 style="font-weight:600; padding:10px">编辑用户信息</h3>
+	<table class="layui-table layui-table-form">
+		<tr>
+			<td class="layui-td-gray">用户等级 <span style="color: red">*</span></td>
+			<td>
+				<input type="hidden" name="id" value="{$user.id}">
+				<select name="level" lay-verify="required" lay-reqText="请选择用户等级">
+				<option value="">请选择用户等级</option>
+				{volist name="levels" id="v"}
+				<option value="{$v.id}" {eq name="$user.level" value="$v.id"}selected{/eq}>{$v.title}</option>
+				{/volist}
+			  </select>
+			</td>
+			<td class="layui-td-gray">用户昵称 <span style="color: red">*</span></td>
+			<td>
+				<input type="text" name="nickname" placeholder="请输入用户昵称"	autocomplete="off" class="layui-input" value="{$user.nickname}" lay-verify="required" lay-reqText="请输入用户昵称">
+			</td>
+			<td class="layui-td-gray">真实姓名</td>
+			<td>
+				<input type="text" name="name" placeholder="请输入真实姓名"	autocomplete="off" class="layui-input" value="{$user.name}">
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">性别</td>
+			<td>
+				<input type="radio" name="sex" value="1" title="男" {eq name="$user.sex" value="1" }checked{/eq}>
+				<input type="radio" name="sex" value="2" title="女" {eq name="$user.sex" value="2" }checked{/eq}>
+			</td>
+			<td class="layui-td-gray">手机号码</td>
+			<td>
+				<input type="text" name="mobile" placeholder="请输入手机"	autocomplete="off" class="layui-input" value="{$user.mobile}">
+			</td>
+			<td class="layui-td-gray">电子邮箱</td>
+			<td>
+				<input type="text" name="email" placeholder="请输入电子邮箱" autocomplete="off" class="layui-input" value="{$user.email}">
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">个人简介</td>
+			<td colspan="5">
+				<textarea name="desc" placeholder="请输入个人简介" class="layui-textarea">{$user.desc}</textarea>
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">所在企业</td>
+			<td>
+				<input type="text" name="company" placeholder="请输入所在企业"	autocomplete="off" class="layui-input" value="{$user.company}">
+			</td>
+			<td class="layui-td-gray">所在部门</td>
+			<td>
+				<input type="text" name="depament" placeholder="请输入所在部门"	autocomplete="off" class="layui-input" value="{$user.depament}">
+			</td>
+			<td class="layui-td-gray">所在职位</td>
+			<td>
+				<input type="text" name="position" placeholder="请输入所在职位" autocomplete="off" class="layui-input" value="{$user.position}">
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">企业地址</td>
+			<td colspan="5">
+				<input type="text" name="address" placeholder="请输入企业地址" autocomplete="off" class="layui-input" value="{$user.address}">
+			</td>
+		</tr>
+	</table>
+
+	<div style="padding: 10px">
+		<button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">立即提交</button>
+		<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+		<button lay-event="back" class="layui-btn layui-btn-primary">返回</button>
+	</div>
+</form>
+{/block}
+<!-- /主体 -->
+
+<!-- 脚本 -->
+{block name="script"}
+<script>
+	function init(layui) {
+		var form = layui.form
+			, layer = layui.layer
+			, upload = layui.upload;
+
+		//头像上传
+		var uploadInst = upload.render({
+			elem: '#test1'
+			, url: '/admin/api/upload'
+			, done: function (res) {
+				//如果上传失败
+				if (res.code == 1) {
+					return layer.msg('上传失败');
+				}
+				//上传成功
+				$('#demo1 input').attr('value', res.data.filepath);
+				$('#demo1 img').attr('src', res.data.filepath);
+			}
+		});
+
+		//监听提交
+		form.on('submit(webform)', function (data) {
+			$.ajax({
+				url: "/admin/user/edit",
+				type: 'post',
+				data: data.field,
+				success: function (e) {
+					if (e.code == 0) {
+						layer.confirm('保存成功,返回列表页吗?', { icon: 3, title: '提示' }, function (index) {
+							window.location.href="/admin/user/index.html";
+							layer.close(index);
+						});
+					} else {
+						layer.msg(e.msg);
+					}
+				}
+			})
+			return false;
+		});
+		//监听返回
+		$('.body-table').on('click', '[lay-event="back"]', function () {
+			window.location.href="/admin/user/index.html";
+			return false;
+		});
+
+	}
+
+</script>
+{include file="common/layui" base="base" extend="[]" callback="init" /}
+{/block}
+<!-- /脚本 -->

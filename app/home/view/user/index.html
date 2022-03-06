@@ -1,0 +1,71 @@
+{extend name="common/base"/}
+{block name="style"}
+<link rel="stylesheet" href="{__CSS__}/user.css?v={:get_system_config('web','version')}" media="all">
+{/block}
+<!-- 主体 -->
+{block name="body"}
+{include file="common/header" nav='info' /}
+<div class="user">
+	<div class="user-home"><a href="/">首页</a> - 个人中心</div>
+	<div class="user-box clearfix">
+		<div class="l user-menu">
+			{include file="common/usermenu" nav='info' /}
+		</div>
+		<div class="r user-right">
+			<div class="user-info">
+				<dl class="clearfix">
+					<dt class="user-info-img"><img src="{$userInfo.headimgurl}" /></dt>
+					<dd class="user-info-name">{$userInfo.showname} [{$userInfo.level_title}]</dd>
+					<dd class="user-info-tips">
+						{$userInfo.desc}
+					</dd>
+				</dl>
+			</div>
+			<div class="user-detail">
+				<div class="user-detail-h3">基本资料 <a href="info_edit.html">[编辑]</a></div>
+				<table class="user-detail-table">
+					<tr>
+						<td class="td-gay" width="12%">真实姓名</td>
+						<td width="38%">{$userInfo.name}</td>
+						<td class="td-gay" width="12%">性别</td>
+						<td width="38%">{$userInfo.sex}</td>
+					</tr>
+					<tr>
+						<td class="td-gay">所在城市</td>
+						<td>{$userInfo.city}</td>
+						<td class="td-gay">出生日期</td>
+						<td>{:date('Y-m-d',$userInfo.birthday)}</td>
+					</tr>
+					<tr>
+						<td class="td-gay">手机号码</td>
+						<td>{$userInfo.mobile}</td>
+						<td class="td-gay">电子邮箱</td>
+						<td>{$userInfo.email}</td>
+					</tr>
+					<tr>
+						<td class="td-gay">公司名称</td>
+						<td>{$userInfo.company}</td>
+						<td class="td-gay">公司所在地区</td>
+						<td>{$userInfo.address}</td>
+					</tr>
+					<tr>
+						<td class="td-gay">所在部门</td>
+						<td>{$userInfo.depament}</td>
+						<td class="td-gay">担任职位</td>
+						<td>{$userInfo.position}</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+{/block}
+<!-- /主体 -->
+
+<!-- 脚本 -->
+{block name="script"}
+<script>
+
+</script>
+{/block}
+<!-- /脚本 -->

@@ -1,0 +1,75 @@
+{extend name="common/base"/}
+<!-- 主体 -->
+{block name="body"}
+<form class="layui-form page-content">
+	<h3 class="h3-title">轮播组</h3>
+	<table class="layui-table layui-table-form">
+		<tr>
+			<td class="layui-td-gray">标题<font>*</font></td>
+			<td>
+				<input type="hidden" name="id" value="{$id}" />
+				<input type="text" name="title" lay-verify="required" lay-reqText="请输入标题" autocomplete="off" placeholder="请输入标题" class="layui-input" {notempty name="$slide.title" }value="{$slide.title}" {/notempty}>
+			</td>
+			<td class="layui-td-gray">标识</td>
+			<td><input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入标识" lay-reqText="请输入标识" class="layui-input" {notempty name="$slide.name" }value="{$slide.name}" {/notempty}></td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">状态<font>*</font></td>
+			<td colspan="3">
+				{if condition="$id eq 0"}
+				<input type="radio" name="status" value="1" title="正常" checked>
+				<input type="radio" name="status" value="-1" title="禁用">
+				{else/}
+				<input type="radio" name="status" value="1" title="正常" {eq name="$slide.status" value="1" }checked{/eq}>
+				<input type="radio" name="status" value="-1" title="禁用" {eq name="$slide.status" value="-1"
+					}checked{/eq}>
+				{/if}
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">备注</td>
+			<td colspan="3">
+				<textarea name="desc" placeholder="请输入备注" class="layui-textarea">{notempty name="$slide.desc" }{$slide.desc}{/notempty}</textarea>
+			</td>
+		</tr>
+	</table>
+	<div style="padding: 10px 0">
+		<button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">立即提交</button>
+		<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	</div>
+</form>
+{/block}
+<!-- /主体 -->
+
+<!-- 脚本 -->
+{block name="script"}
+<script>
+	function init(layui) {
+		var form = layui.form
+			, layer = layui.layer
+			, upload = layui.upload;
+
+		//监听提交
+		form.on('submit(webform)', function (data) {
+			$.ajax({
+				url: "/admin/slide/add",
+				type: 'post',
+				data: data.field,
+				success: function (e) {
+					layer.msg(e.msg);
+					if (e.code == 0) {
+						parent.tableIns.reload();
+						setTimeout(function(){
+							parent.layui.rightpage.close();
+						},1000);
+					}
+				}
+			})
+			return false;
+		});
+	}
+
+</script>
+{include file="common/layui" base="base" extend="[]" callback="init" /}
+{/block}
+<!-- /脚本 -->

@@ -1,0 +1,194 @@
+{extend name="common/base"/}
+<!-- 主体 -->
+{block name="body"}
+<form class="layui-form body-table">
+	{if condition="$id eq 0"}
+	<div class="layui-form-bar" style="padding-bottom:0">
+		<h3 class="h3-title">新增管理员</h3>
+	</div>
+	<table class="layui-table layui-table-form">
+		<tr>
+			<td class="layui-td-gray">登录账号<font>*</font></td>
+			<td>
+				<input type="text" name="username" lay-verify="required" autocomplete="off" placeholder="请输入登录账号" lay-reqText="请输入登录账号" class="layui-input">
+			</td>
+			<td class="layui-td-gray">用户名<font>*</font></td>
+			<td>
+				<input type="text" name="nickname" lay-verify="required" placeholder="请输入用户名" lay-reqText="请输入用户名" autocomplete="off" class="layui-input">
+			</td>
+			<td rowspan="3" class="layui-td-gray2">头像<br /><span style="font-size: 12px;">(如若不上传<br />系统将自动生成)</span></td>
+			<td rowspan="3" valign="top" style="width: 100px;">
+				<div class="layui-upload" style="width: 100px;">
+					<div class="layui-upload-list" id="demo1" style="width: 100%; height:100px; overflow: hidden;">
+						<img src="/static/admin/images/nonepic600x600.jpg" height="100" style="max-width: 100%; width: 100%;" />
+						<input type="hidden" name="thumb" value="">
+					</div>
+					<button type="button" class="layui-btn layui-btn-normal" style="width: 100%;" id="test1">上传头像</button>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">密码<font>*</font></td>
+			<td>
+				<input type="password" name="pwd" lay-verify="required" placeholder="请输入密码" lay-reqText="请输入密码" autocomplete="off" class="layui-input">
+			</td>
+			<td class="layui-td-gray">确认密码<font>*</font></td>
+			<td>
+				<input type="password" name="pwd_confirm" lay-verify="required" placeholder="请再次输入密码" lay-reqText="请再次输入密码" autocomplete="off" class="layui-input">
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">手机号码<font>*</font></td>
+			<td>
+				<input type="text" name="mobile" lay-verify="required" placeholder="请输入手机" lay-reqText="请输入手机" autocomplete="off" class="layui-input">
+			</td>
+			<td class="layui-td-gray">状态<font>*</font></td>
+			<td>
+				<input type="radio" name="status" value="1" title="正常" checked>
+				<input type="radio" name="status" value="0" title="禁止登录">
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">用户角色<font>*</font>
+			</td>
+			<td colspan="5">
+				{volist name=":get_admin_group()" id="v"}
+				<input type="checkbox" name="group_id[]" title="{$v.title}" value="{$v.id}" lay-skin="primary">
+				{/volist}
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">备注</td>
+			<td colspan="5">
+				<textarea name="desc" placeholder="请输入备注" class="layui-textarea"></textarea>
+			</td>
+		</tr>
+	</table>
+	{else/}
+	<div class="layui-form-bar" style="padding-bottom:0">
+		<h3 class="h3-title">编辑管理员</h3>
+	</div>
+	<table class="layui-table layui-table-form">
+		<tr>
+			<td class="layui-td-gray">登录账号<font>*</font></td>
+			<td>
+				<input type="hidden" name="id" value="{$admin.id}">
+				<input type="text" name="username" lay-verify="required" autocomplete="off" placeholder="请输入登录账号" lay-reqText="请输入登录账号" class="layui-input" value="{$admin.username}">
+			</td>
+			<td class="layui-td-gray">用户名<font>*</font></td>
+			<td>
+				<input type="text" name="nickname" lay-verify="required" placeholder="请输入用户名" lay-reqText="请输入用户名" autocomplete="off" class="layui-input" value="{$admin.nickname}">
+			</td>
+			<td rowspan="3" class="layui-td-gray2">头像<br /><span style="font-size: 12px;">(如若不上传<br />系统将自动生成)</span>
+			</td>
+			<td rowspan="3" valign="top" style="width: 100px;">
+				<div class="layui-upload" style="width: 100px;">
+					<div class="layui-upload-list" id="demo1" style="width: 100%; height:100px; overflow: hidden;">
+						<img src="{$admin.thumb}" height="100" style="max-width: 100%; width: 100%;" />
+						<input type="hidden" name="thumb" value="{$admin.thumb}">
+					</div>
+					<button type="button" class="layui-btn layui-btn-normal" style="width: 100%;" id="test1">上传头像</button>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">密码</td>
+			<td>
+				<input type="password" name="edit_pwd" placeholder="请输入密码" autocomplete="off" class="layui-input">
+			</td>
+			<td class="layui-td-gray">确认密码</td>
+			<td>
+				<input type="password" name="edit_pwd_confirm" placeholder="请再次输入密码" autocomplete="off" class="layui-input">
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">手机号码<font>*</font></td>
+			<td>
+				<input type="text" name="mobile" lay-verify="required" placeholder="请输入手机" lay-reqText="请输入手机"
+					autocomplete="off" class="layui-input" value="{$admin.mobile}">
+			</td>
+			<td class="layui-td-gray2">状态<font>*</font></td>
+			<td>
+				<input type="radio" name="status" value="1" title="正常" {eq name="$admin.status" value="1" }checked{/eq}>
+				<input type="radio" name="status" value="0" title="禁止登录" {eq name="$admin.status" value="0"}checked{/eq}>
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">用户角色<font>*</font></td>
+			<td colspan="5">
+				{volist name=":get_admin_group()" id="v"}
+				<input type="checkbox" name="group_id[]" title="{$v.title}" value="{$v.id}" {volist name="$admin.group_id" id="a" }{eq name="$a" value="$v.id" }checked{/eq}{/volist} lay-skin="primary">
+				{/volist}
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">备注</td>
+			<td colspan="5">
+				<textarea name="desc" placeholder="请输入备注" class="layui-textarea">{$admin.desc}</textarea>
+			</td>
+		</tr>
+	</table>
+	{/if}
+	<div style="padding: 10px">
+		<button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">立即提交</button>
+		<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+		<span lay-event="back" class="layui-btn layui-btn-primary">返回</span>
+	</div>
+</form>
+{/block}
+<!-- /主体 -->
+
+<!-- 脚本 -->
+{block name="script"}
+<script>
+	function init(layui) {
+		var TAB = parent.layui.tab,
+			form = layui.form,
+			layer = layui.layer,
+			upload = layui.upload;
+
+		//头像上传
+		var uploadInst = upload.render({
+			elem: '#test1'
+			, url: '/admin/api/upload'
+			, done: function (e) {
+				//如果上传失败
+				if (e.code == 1) {
+					return layer.msg('上传失败');
+				}
+				//上传成功
+				$('#demo1 input').attr('value', e.data.filepath);
+				$('#demo1 img').attr('src', e.data.filepath);
+			}
+		});
+
+		//监听提交
+		form.on('submit(webform)', function (data) {
+			$.ajax({
+				url: "/admin/admin/add",
+				type: 'post',
+				data: data.field,
+				success: function (e) {
+					if (e.code == 0) {
+						layer.confirm('保存成功,返回列表页吗?', { icon: 3, title: '提示' }, function (index) {
+							window.location.href="/admin/admin/index";
+							layer.close(index);
+						});
+					} else {
+						layer.msg(e.msg);
+					}
+				}
+			})
+			return false;
+		});
+		//监听返回
+		$('.body-table').on('click', '[lay-event="back"]', function () {
+			window.location.href="/admin/admin/index";
+			return false;
+		});
+	}
+
+</script>
+{include file="common/layui" base='base' extend="[]" callback="init" /}
+{/block}
+<!-- /脚本 -->

@@ -1,0 +1,107 @@
+{extend name="common/base"/}
+<!-- 主体 -->
+{block name="body"}
+<form class="layui-form page-content">
+	<h3 class="h3-title">友情链接</h3>
+	<table class="layui-table layui-table-form">
+		<tr>
+			<td class="layui-td-gray">网站名称<font>*</font></td>
+			<td>
+				<input type="hidden" name="id" value="{$id}" />
+				<input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入网站名称" lay-reqText="请输入网站名称" class="layui-input" {notempty name="$links.name" }value="{$links.name}" {/notempty}>
+			</td>
+			<td rowspan="4" class="layui-td-gray">网站Logo</td>
+			<td rowspan="4">
+				<div class="layui-upload" style="text-align:center">
+					<button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="test1">上传网站Logo</button>
+					<div class="layui-upload-list" id="demo1" style="width:200px; height:120px; overflow:hidden">
+						<img {notempty name="$links.logo" }src="{:get_file($links.logo)}" {/notempty} heght="120px;" style="max-width: 100%;" />
+						<input type="hidden" name="logo" {notempty name="$links.logo" }value="{$links.logo}" {/notempty}>
+					</div>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">网站链接<font>*</font></td>
+			<td>
+				<input type="text" name="src" lay-verify="required" autocomplete="off" placeholder="请输入网站链接" lay-reqText="请输入网站链接" class="layui-input" {notempty name="$links.src" }value="{$links.src}" {/notempty}>
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray2">是否新窗口打开</td>
+			<td>
+			  {notempty name="$links.target" }
+			  <input type="radio" name="target" value="1" title="是" {eq name="$links.target" value="1" }checked{/eq}>
+			  <input type="radio" name="target" value="0" title="否" {eq name="$links.target" value="0" }checked{/eq}>
+			  {else/}
+			  <input type="radio" name="target" value="1" title="是" checked>
+			  <input type="radio" name="target" value="0" title="否">
+			  {/notempty}
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">排序</td>
+			<td>
+				{notempty name="$links.target" }
+				  <input type="text" name="sort" placeholder="请输入排序，数字" autocomplete="off" class="layui-input" value="{$links.sort}">
+				  {else/}
+				  <input type="text" name="sort" placeholder="请输入排序，数字" autocomplete="off" class="layui-input" value="0">
+				{/notempty}
+			</td>
+		</tr>
+	</table>
+
+	<div style="padding: 10px 0">
+		<button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">立即提交</button>
+		<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	</div>
+</form>
+{/block}
+<!-- /主体 -->
+
+<!-- 脚本 -->
+{block name="script"}
+<script>
+	function init(layui) {
+		var form = layui.form,
+			layer = layui.layer,
+			upload = layui.upload;
+
+		//pc端图片
+		var uploadInst = upload.render({
+			elem: '#test1',
+			url: '/admin/api/upload',
+			done: function (e) {
+				//如果上传失败
+				if (e.code == 1) {
+					return layer.msg('上传失败');
+				}
+				//上传成功
+				$('#demo1 input').attr('value', e.data.id);
+				$('#demo1 img').attr('src', e.data.filepath);
+			}
+		});
+
+		//监听提交
+		form.on('submit(webform)', function (data) {
+			$.ajax({
+				url: "/admin/links/add",
+				type: 'post',
+				data: data.field,
+				success: function (e) {
+					layer.msg(e.msg);
+					if (e.code == 0) {
+						parent.tableIns.reload();
+						setTimeout(function(){
+							parent.layui.rightpage.close();
+						},1000);
+					}
+				}
+			})
+			return false;
+		});
+	}
+</script>
+{include file="common/layui" base='base' extend="[]" callback="init" /}
+{/block}
+<!-- /脚本 -->

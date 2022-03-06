@@ -1,0 +1,30 @@
+	<script id="[id]" name="[name]" type="text/plain"></script>
+	{if condition=" '[ueditor]'!=='more' "}
+	<script type="text/javascript" src="{__STATIC__}/ueditor/ueditor.config.min.js"></script>
+	<script type="text/javascript" src="{__STATIC__}/ueditor/ueditor.all.min.js"></script>
+	{/if}
+	<script type="text/javascript">
+		var ueditorId='[id]';
+		var ueditorWidth='[width]';
+		var ueditorHeight='[height]';
+		var readonly='[readonly]';
+		var toolbarArray=[toolbar];
+		var ueditorRead=false;
+		if(readonly=='true'){
+			ueditorRead=true;
+		}
+		var ueditorToolbar=['fullscreen', 'source', 'undo', 'redo','|','fontsize','bold', 'italic', 'underline','forecolor', 'strikethrough', 'superscript', 'subscript','|', 'removeformat', 'formatmatch', 'insertcode', 'pasteplain','link','unlink','|','justifyleft','justifycenter','justifyright','justifyjustify','|', 'insertorderedlist', 'insertunorderedlist','simpleupload', 'insertimage', 'inserttable', 'selectall', 'cleardoc'];
+		if(toolbarArray && toolbarArray.length>0){
+			ueditorToolbar=toolbarArray;
+		}
+		var ue = UE.getEditor(ueditorId,{
+			//初始化高度
+			toolbars: [
+				ueditorToolbar
+			],
+			pasteplain:true,
+			readonly:ueditorRead,
+			initialFrameWidth:ueditorWidth,
+			initialFrameHeight:ueditorHeight
+		});
+	</script>

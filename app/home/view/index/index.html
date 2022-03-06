@@ -1,0 +1,176 @@
+{extend name="common/base"/}
+{block name="style"}
+<link rel="stylesheet" href="{__CSS__}/index.css?v={:get_system_config('web','version')}">
+{/block}
+<!-- 主体 -->
+{block name="body"}
+{include file="common/header" nav='info' /}
+<div class="index">
+	<div class="intro">
+		<div class="intro-box">
+			<div class="intro-info">
+				<div class="intro-title">勾股CMS，让WEB开发更简单！</div>
+				<div class="intro-text">勾股CMS是一套基于ThinkPHP6 + Layui + MySql打造的轻量级、高性能极速后台开发框架。<br/>系统后台各管理模块，一目了然，操作简单，通用型的后台权限管理框架，干净不臃肿、极易上手、开箱即用。<br/>系统设计思想很简单，以简洁为原则，结构清晰，易于功能扩展，代码维护，非常容易定制和二次开发，帮助开发者简单高效降低二次开发成本。</div>
+			</div>
+			<div class="intro-ops">
+				<div class="cms-download">
+					<a href="/home/index/down.html" target="_blank">立即下载</a>
+				</div>
+			  <div class="cms-version">
+				<span>当前版本：<i>v{:CMS_VERSION}</i></span>
+				<span><a href="/home/index/logs.html" rel="nofollow" target="_blank">更新日志</a></span>
+				<span>下载量：<i>{$count}</i></span>
+			  </div>
+			  <div class="cms-other">
+				<a href="https://github.com/" target="_blank" rel="nofollow" class="site-fork">
+				  GitHub 
+				</a>
+				<a href="https://gitee.com/gougucms/gougucms" target="_blank" rel="nofollow" class="site-fork">
+				  码云
+				</a>
+			  </div>
+			</div>
+		</div>
+		<div class="intro-img">
+			<img src="{__IMG__}/banner_bg.png" />
+		</div>
+	</div>
+	<div class="advantage">
+		<div class="advantage-title">系统特色</div>
+		<div class="advantage-sub-title">完全免费开源，系统易于功能扩展，代码维护，非常容易定制和二次开发。</div>
+		<div class="item-wrap">
+			<div class="advantage-item">
+				<div class="feature">
+					<div class="part-icon"><img src="{__IMG__}/code.png"></div>
+					<div class="part-text">
+						<h3>友好的二次开发</h3>
+						<p>系统采用MVC的开发模式，代码完全免费开源，注释清晰，模块相互独立，可以便捷进行二次开发。</p>
+					</div>
+				</div>
+			</div>
+			<div class="advantage-item">
+				<div class="feature">
+					<div class="part-icon"><img src="{__IMG__}/auth.png"></div>
+					<div class="part-text">
+						<h3>RBAC权限管理</h3>
+						<p>基于RBAC权限控制管理，无限父子级权限分组，可自由分配子级权限，一个管理员可同时属于多个组别。</p>
+					</div>
+				</div>
+			</div>
+			<div class="advantage-item">
+				<div class="feature">
+					<div class="part-icon"><img src="{__IMG__}/log.png"></div>
+					<div class="part-text">
+						<h3>完整的操作日志</h3>
+						<p>后台的操作留痕，全面的日志管理，全面监控方便追溯和定位问题；对平台用户的行为记录，方便分析用户的行为。</p>
+					</div>
+				</div>
+			</div>
+			<div class="advantage-item">
+				<div class="feature">
+					<div class="part-icon"><img src="{__IMG__}/bak.png"></div>
+					<div class="part-text">
+						<h3>安全的数据备份</h3>
+						<p>支持在线自由备份、恢复数据库，提供优化表、修复表的功能，无惧数据丢失及人为损坏。</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="cms-banner">
+		<div class="blog">
+			<img src="https://blog.gougucms.com/static/admin/images/login_logo.png">
+			<span>轻巧的博客系统</span>
+			<ul>
+				<li>● 基于勾股CMS二次开发，一脉相承</li>
+				<li>● 简约、易用、轻快、内存低等特点</li>
+			</ul>
+			<ul>
+				<li>● 集成文章、动态、归档、访问统计等功能</li>
+				<li>● 可做博客，工作室，自媒体等各类网站</li>
+			</ul>
+			<a href="https://blog.gougucms.com/" target="_blank">免费开源</a>
+		</div>
+	</div>
+	<div class="function">
+		<div class="function-title">功能矩阵</div>
+		<div class="function-sub-title">系统后台集成了主流的通用功能，如：登录验证、系统配置、操作日志管理、角色权限、功能模块、功能节点、导航设置、网站地图、轮播广告、友情链接、TAG关键字管理、搜索关键字管理、文件上传、数据备份/还原、文章功能、商品功能、用户等级、用户管理、用户操作日志、用户注册/登录、 API接口等。更多的个性化功能可以基于当前系统便捷做二次开发。</div>
+		<div class="function-wrap">
+			<div class="function-img">
+				<img src="{__IMG__}/function.png">
+			</div>
+			<div class="function-main">
+				<div class="function-item">
+					<div class="item-box">
+						<img src="{__IMG__}/system.png">
+						<h3>系统管理</h3>
+					</div>
+					<ul>
+						<li><span>✓</span>系统配置</li>
+						<li><span>✓</span>功能模块</li>
+						<li><span>✓</span>功能节点</li>
+						<li><span>✓</span>权限角色</li>
+						<li><span>✓</span>管 理 员</li>
+						<li><span>✓</span>操作日志</li>
+						<li><span>✓</span>系统配置</li>
+						<li><span>✓</span>数据备份</li>
+						<li><span>✓</span>数据还原</li>
+					</ul>
+				</div>
+				<div class="function-item">
+					<div class="item-box">
+						<img src="{__IMG__}/data.png">
+						<h3>基础数据</h3>
+					</div>
+					<ul>
+						<li><span>✓</span>导航设置</li>
+						<li><span>✓</span>网站地图</li>
+						<li><span>✓</span>轮播广告</li>
+						<li><span>✓</span>友情链接</li>
+						<li><span>✓</span>SEO关键字</li>
+						<li><span>✓</span>搜索关键词</li>
+					</ul>
+				</div>
+				<div class="function-item">
+					<div class="item-box">
+						<img src="{__IMG__}/user.png">
+						<h3>平台用户</h3>
+					</div>
+					<ul>
+						<li><span>✓</span>用户等级</li>
+						<li><span>✓</span>用户列表</li>
+						<li><span>✓</span>操作记录</li>
+						<li><span>✓</span>操作日志</li>
+					</ul>
+				</div>
+				<div class="function-item">
+					<div class="item-box">
+						<img src="{__IMG__}/actrcle.png">
+						<h3>资讯中心</h3>
+					</div>
+					<ul>
+						<li><span>✓</span>文章分类</li>
+						<li><span>✓</span>文章列表</li>
+					</ul>
+				</div>
+				<div class="function-item">
+					<div class="item-box">
+						<img src="{__IMG__}/goods.png">
+						<h3>商品中心</h3>
+					</div>
+					<ul>
+						<li><span>✓</span>商品分类</li>
+						<li><span>✓</span>商品列表</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+</div>
+{/block}
+<!-- /主体 -->
+
+<!-- 脚本 -->
+{block name="script"}
+
+{/block}
+<!-- /脚本 -->

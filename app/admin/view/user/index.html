@@ -1,0 +1,209 @@
+{extend name="common/base"/}
+<!-- 主体 -->
+{block name="body"}
+<div class="body-table">
+	<form class="layui-form layui-form-bar">
+		<div class="layui-input-inline" style="width:300px;">
+			<input type="text" name="keywords" placeholder="昵称/真实姓名/手机号" class="layui-input" autocomplete="off"/>
+		</div>
+		<div class="layui-input-inline" style="width:120px;">
+			<input type="text" class="layui-input" id="start_time" readonly placeholder="注册开始时间" name="start_time">
+		</div>
+		~
+		<div class="layui-input-inline" style="width:120px;">
+			<input type="text" class="layui-input" id="end_time" readonly placeholder="注册结束时间" name="end_time">
+		</div>
+		<button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">提交搜索</button>
+	</form>
+	<table class="layui-hide" id="test" lay-filter="test"></table>
+</div>
+<script type="text/html" id="status">
+	<i class="layui-icon {{#  if(d.status == 1){ }}layui-icon-ok{{#  } else { }}layui-icon-close{{#  } }}"></i>
+</script>
+<script type="text/html" id="barDemo">
+<div class="layui-btn-group"><span class="layui-btn layui-btn-xs layui-btn-normal" lay-event="view">详情</span><a class="layui-btn layui-btn-xs" href="/admin/user/edit?id={{d.id}}">编辑</a>
+  {{#  if(d.status == 1){ }}<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">禁用</a>{{#  } else { }}<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="open">启用</a>{{#  } }}</div>
+  
+</script>
+{/block}
+<!-- /主体 -->
+
+<!-- 脚本 -->
+{block name="script"}
+<script>
+	function init(layui) {
+		var TAB = parent.layui.tab,
+			table = layui.table,
+			form = layui.form,
+			laydate = layui.laydate;
+
+		laydate.render({
+			elem: '#start_time',
+			type: 'date'
+		});
+
+		laydate.render({
+			elem: '#end_time',
+			type: 'date'
+		});
+
+
+		var tableIns = table.render({
+			elem: '#test',
+			title: '用户列表',
+			toolbar: '#toolbarDemo',
+			url: '/admin/user/index', //数据接口
+			page: true, //开启分页
+			limit: 20,
+			cols: [
+				[ //表头
+					{
+						field: 'id',
+						title: 'ID号',
+						align: 'center',
+						width: 90
+					}, {
+						field: 'headimgurl',
+						title: '头像',
+						align: 'center',
+						width: 60,
+						templet: function(d) {
+							var html = '';
+							var delBtn = '<img src="' + d.headimgurl + '" width="28" height="28"/>';
+							return delBtn;
+						}
+					}, {
+						field: 'username',
+						title: '用户名',
+						align: 'center',
+						width: 100
+					}, {
+						field: 'level_name',
+						title: '会员等级',
+						align: 'center',
+						width: 90
+					}, {
+						field: 'sex',
+						title: '性别',
+						align: 'center',
+						width: 60,
+						templet: function(d) {
+							var html = '-';
+							if (d.sex == 1) {
+								html = '男'
+							} else if (d.sex == 2) {
+								html = '女'
+							}
+							return html;
+						}
+					}, {
+						field: 'nickname',
+						title: '昵称',
+						align: 'center',
+						width: 100
+					},{
+						field: 'name',
+						title: '真实姓名',
+						align: 'center',
+						width: 100
+					}, {
+						field: 'mobile',
+						title: '手机号码',
+						align: 'center',
+						width: 120
+					}, {
+						field: 'email',
+						title: '电子邮箱',
+						align: 'center',
+						minWidth: 150
+					},{
+						field: 'register_time',
+						title: '注册时间',
+						align: 'center',
+						width: 150
+					}, {
+						field: 'status',
+						title: '状态',
+						toolbar: '#status',
+						align: 'center',
+						width: 60
+					},{
+						field: 'right',
+						title: '操作',
+						align: 'center',
+						toolbar: '#barDemo',
+						width: 130
+					}
+				]
+			]
+		});
+
+			//监听行工具事件
+			table.on('tool(test)', function (obj) {
+			var data = obj.data;
+			if (obj.event === 'view') {
+				TAB.sonAdd('/admin/user/view?id='+data.id,'用户详情');
+				return;
+			}
+			else if (obj.event === 'del') {
+				layer.confirm('您确定要禁用该用户', {
+					icon: 3,
+					title: '提示'
+				}, function (index) {
+					$.ajax({
+						url: "/admin/user/delete",
+						data: {
+							id: data.id,
+							status:0
+						},
+						success: function (e) {
+							layer.msg(e.msg);
+							if (e.code == 0) {
+								location.reload();
+							}
+						}
+					})
+					layer.close(index);
+				});
+			}else if (obj.event === 'open') {
+				layer.confirm('您确定要启用该用户', {
+					icon: 3,
+					title: '提示'
+				}, function (index) {
+					$.ajax({
+						url: "/admin/user/delete",
+						data: {
+							id: data.id,
+							status:1
+						},
+						success: function (e) {
+							layer.msg(e.msg);
+							if (e.code == 0) {
+								location.reload();
+							}
+						}
+					})
+					layer.close(index);
+				});
+			}
+		});	
+		//监听搜索提交
+		form.on('submit(webform)', function(data) {
+			tableIns.reload({
+				where: {
+					keywords: data.field.keywords,
+					attach: data.field.attach,
+					start_time: data.field.start_time,
+					end_time: data.field.end_time
+				},
+				page: {
+					curr: 1
+				}
+			});
+			return false;
+		});
+	}
+</script>
+{include file="common/layui" base="base" extend="[]" callback="init" /}
+{/block}
+<!-- /脚本 -->

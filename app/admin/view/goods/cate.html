@@ -1,0 +1,87 @@
+{extend name="common/base"/}
+<!-- 主体 -->
+{block name="body"}
+<div class="body-table" style="margin-bottom:0">
+    <div class="layui-form-bar">
+		<button class="layui-btn layui-btn-normal layui-btn-sm add-menu">+ 添加分类</button>
+    </div>
+    <div>
+      <table class="layui-hide" id="treeTable" lay-filter="treeTable"></table>
+    </div> 
+</div>
+<script type="text/html" id="switchStatus">
+	<input type="checkbox" name="status" value="{{d.id}}" lay-skin="switch" lay-text="是|否" lay-filter="status" {{ d.status == 1 ? 'checked' : '' }}>
+</script>
+{/block}
+<!-- /主体 -->
+
+<!-- 脚本 -->
+{block name="script"}
+	<script>
+		var editObj=null,ptable=null,treeGrid=null,tableId='treeTable',layer=null;
+		function init(layui){
+			var table=layui.table,form = layui.form,rightpage = layui.rightpage,layer=layui.layer;
+			treeGrid = layui.treeGrid;//很重要
+			ptable=treeGrid.render({
+				id:tableId
+				,elem: '#'+tableId
+				,idField:'id'
+				,url:'/admin/goods/cate'
+				,cellMinWidth: 100
+				,treeId:'id'//树形id字段名称
+				,treeUpId:'pid'//树形父id字段名称
+				,treeShowName:'title'//以树形式显示的字段
+				,cols: [[
+					{field:'id',width:80, title: 'ID号', align:'center'}
+					,{field: 'sort', title: '排序', align:'center', width:80}
+					,{field:'title',width:240, title: '分类名称'}
+					,{field:'pid', title: '父级ID',width:80, align:'center'}
+					,{field:'keywords', title: '关键词', width:200,}
+					,{field:'desc', title: '描述'}
+					,{width:160,title: '操作', align:'center',templet: function(d){
+						var html = '<span class="layui-btn-group"><button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="add">添加子分类</button><button class="layui-btn layui-btn-xs" lay-event="edit">编辑</button><button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</button></span>';
+					return html;
+					  }
+					}
+				]]
+				,page:false
+				//,skin:'line'
+			});
+			//表头工具栏事件
+			$('.add-menu').on('click', function(){
+				rightpage.open("/admin/goods/cate_add",'900px');
+				return;
+			});
+			
+			//操作按钮
+			treeGrid.on('tool('+tableId+')',function (obj) {
+				if (obj.event === 'add') {
+					rightpage.open('/admin/goods/cate_add?pid='+obj.data.id,'900px');
+					return;
+				}
+				if (obj.event === 'edit') {
+					rightpage.open('/admin/goods/cate_add?id='+obj.data.id,'900px');
+					return;
+				}
+				if(obj.event === 'del'){
+					layer.confirm('确定要删除吗?', {icon: 3, title:'提示'}, function(index){
+						$.ajax({
+						  url:"/admin/goods/cate_delete",
+						  type:'post',
+						  data:{id:obj.data.id},
+						  success:function(res){
+							layer.msg(res.msg);
+							if(res.code == 0){
+								obj.del();
+							}
+						  }
+						}) 
+						layer.close(index);
+					});
+				}
+			});
+		}
+	</script>
+	{include file="common/layui" base='base' extend="['treeGrid','rightpage']" callback="init" /}
+{/block}
+<!-- /脚本 -->

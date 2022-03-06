@@ -1,0 +1,169 @@
+{extend name="common/base"/}
+{block name="style"}
+<link rel="stylesheet" href="{__CSS__}/user.css?v={:get_system_config('web','version')}" media="all">
+{/block}
+<!-- 主体 -->
+{block name="body"}
+{include file="common/header" /}
+<div class="user">
+	<div class="user-home"><a href="/">首页</a> - 个人中心</div>
+	<div class="user-box clearfix">
+		<div class="l user-menu">
+			{include file="common/usermenu" /}
+		</div>
+		<div class="r user-right">
+			<div class="user-detail">
+				<div class="user-detail-h3">编辑基本资料</div>
+				<form id="userInfo" autocomplete="off">
+				<table class="user-detail-table">
+					<tr>
+						<td class="td-gay" width="12%">真实姓名</td>
+						<td width="38%">
+							<input type="hidden" name="id" value="{$userInfo.id}">									
+							<input type="text" name="name" value="{$userInfo.name}" style="width:99%;"
+								placeholder="请输入您的真实姓名" />
+						</td>
+						<td class="td-gay" width="12%">性别</td>
+						<td width="38%">
+							<label style="margin-right: 30px;"><input type="radio" name="sex" value="1" {eq
+									name="userInfo.sex" value="1" } checked{/eq} />男</label>
+							<label></label><input type="radio" name="sex" value="2" {eq name="userInfo.sex" value="2" }
+								checked{/eq} />女</label>
+						</td>
+					</tr>
+					<tr>
+						<td class="td-gay">所在城市</td>
+						<td>
+							<input type="text" name="city" value="{$userInfo.city}" style="width:99%;"
+								placeholder="请输入您所在城市" />
+						</td>
+						<td class="td-gay">出生日期</td>
+						<td>
+							<input type="text" id="birthday" name="birthday" readonly value="{$userInfo.birthday}" style="width:99%;" placeholder="请选择出生日期" />
+						</td>
+					</tr>
+					<tr>
+						<td class="td-gay">电子邮箱</td>
+						<td>
+							<input type="text" name="email" value="{$userInfo.email}" style="width:99%;"
+								placeholder="请输入您的电子邮箱" />
+						</td>
+						<td class="td-gay">手机号码</td>
+						<td>
+							<input type="text" name="mobile" value="{$userInfo.mobile}" style="width:99%;" placeholder="请输入手机号码" />
+						</td>
+					</tr>
+					<tr>
+						<td class="td-gay">个人简介</td>
+						<td colspan="3">
+							<textarea name="desc" rows="3" class="input-textarea"
+								placeholder="请输入300字以内的个人简介">{$userInfo.desc}</textarea>
+						</td>
+					</tr>
+					<tr>
+						<td class="td-gay">公司名称</td>
+						<td colspan="3">
+							<input type="text" name="company" value="{$userInfo.company}" style="width:99%;"
+								placeholder="请输入您的公司名称" />
+						</td>
+					</tr>
+					<tr>
+						<td class="td-gay">公司所在地区</td>
+						<td colspan="3">
+							<input type="text" name="address" value="{$userInfo.address}" style="width:99%;"
+								placeholder="请输入公司所在地" />
+						</td>
+					</tr>
+					<tr>
+						<td class="td-gay">所在部门</td>
+						<td>
+							<input type="text" name="depament" value="{$userInfo.depament}" style="width:99%;"
+								placeholder="请输入所在部门" />
+						</td>
+						<td class="td-gay">担任职位</td>
+						<td>
+							<input type="text" name="position" value="{$userInfo.position}" style="width:99%;"
+								placeholder="请输入担任职位" />
+						</td>
+					</tr>
+				</table>
+				</form>
+				<div class="user-detail-edit">
+					<span class="edit-save">保存</span>
+					<span class="edit-cancel">取消</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{/block}
+<!-- /主体 -->
+
+<!-- 脚本 -->
+{block name="script"}
+<script language="javascript" src="{__JS__}/laydate/laydate.js"></script>
+<script>
+
+	//判断E-mail格式是否正确
+	function isEmail(str) {
+		var string = str.replace(/\s/g, "");
+		var patn = /^[_a-zA-Z0-9\-]+(\.[_a-zA-Z0-9\-]*)*@[a-zA-Z0-9\-]+([\.][a-zA-Z0-9\-]+)+$/;
+		if (!patn.test(string)) return false;
+		return true;
+	}
+
+	//判断收集格式是否正确
+	function isMobile(str) {
+		var patn = /^(13|14|15|16|17|18|19)\d{9}$/;
+		if (!patn.test(str)) return false;
+		return true;
+	}
+
+	laydate.render({
+		elem: '#birthday'
+	});
+
+	//取消
+	$('.edit-cancel').on('click', function () {
+		window.location.href = '/home/user/index';
+	});
+
+	//保存用户信息
+	$('.edit-save').on('click', function () {
+		var truename = $('[name="name"]').val(),
+			email = $('[name="email"]').val(),
+			mobile = $('[name="mobile"]').val();
+			
+		if (truename == '') {
+			layer.msg('真实姓名不能为空');
+			return;
+		}
+
+		if (email != '' && !isEmail(email)) {
+			layer.msg('输入的电子邮箱格式错误');
+			return;
+		}
+
+		if (mobile != '' && !isMobile(mobile)) {
+			layer.msg('输入的手机号码格式错误');
+			return;
+		}
+
+		$.ajax({
+			url: "/home/user/edit_submit",
+			data: $('#userInfo').serialize(),
+			type: 'post',
+			async: false,
+			success: function (res) {
+				layer.msg(res.msg);
+				if (res.code === 0) {
+					setTimeout(function () {
+						window.location.href = "{:url('/home/user/index')}";
+					}, 1500);
+				}
+			}
+		})
+	});
+</script>
+{/block}
+<!-- /脚本 -->

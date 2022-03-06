@@ -1,0 +1,122 @@
+{extend name="common/base"/}
+<!-- 主体 -->
+{block name="body"}
+<form class="layui-form page-content">
+	<h3 class="h3-title">网站地图内容</h3>
+	<table class="layui-table layui-table-form">
+		<tr>
+			<td class="layui-td-gray">标题<font>*</font></td>
+			<td>
+				<input type="hidden" name="id" value="{$id}" />
+				<input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入标题" lay-reqText="请输入标题" class="layui-input" {notempty name="$sitemap.name" }value="{$sitemap.name}" {/notempty}>
+			</td>
+			<td class="layui-td-gray">排序</td>
+			<td><input type="text" name="sort" placeholder="请输入排序，数字" autocomplete="off" class="layui-input" {notempty name="$sitemap.sort" }value="{$sitemap.sort}" {/notempty}></td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">PC端链接<font>*</font></td>
+			<td>
+				<input type="text" name="pc_src" lay-verify="required" autocomplete="off" placeholder="请输入PC端链接" lay-reqText="请输入PC端链接" class="layui-input" {notempty name="$sitemap.pc_src"}value="{$sitemap.pc_src}" {/notempty}>
+			</td>
+			<td class="layui-td-gray">移动端链接<font>*</font></td>
+			<td>
+				<input type="text" name="mobile_src" lay-verify="required" autocomplete="off" placeholder="请输入移动端链接" lay-reqText="请输入移动端链接" class="layui-input" {notempty name="$sitemap.mobile_src"}value="{$sitemap.mobile_src}" {/notempty}>
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">PC端图片</td>
+			<td>
+				<div class="layui-upload">
+					<button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="test1">上传PC端图片</button>
+					<div class="layui-upload-list" id="demo1" style="width:200px; height:120px; overflow:hidden">
+						<img {notempty name="$sitemap.pc_img" }src="{:get_file($sitemap.pc_img)}" {/notempty} heght="120px;" style="max-width: 100%;" />
+						<input type="hidden" name="pc_img" {notempty name="$sitemap.pc_img" }value="{$sitemap.pc_img}" {/notempty}>
+					</div>
+				</div>
+			</td>
+			<td class="layui-td-gray">移动端图片</td>
+			<td>
+				<div class="layui-upload">
+					<button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="test2">上传移动端图片</button>
+					<div class="layui-upload-list" id="demo2" style="width:200px; height:120px; overflow:hidden">
+						<img {notempty name="$sitemap.mobile_img" }src="{:get_file($sitemap.mobile_img)}" {/notempty} heght="120px;" style="max-width: 100%;" />
+						<input type="hidden" name="mobile_img" {notempty name="$sitemap.mobile_img" }value="{$sitemap.mobile_img}" {/notempty}>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</table>
+
+	<div style="padding: 10px 0">
+		{notempty name="$sitemap.sitemap_cate_id" }
+		<input type="hidden" name="sitemap_cate_id" value="{$sitemap.sitemap_cate_id}" />
+		{else/}
+		<input type="hidden" name="sitemap_cate_id" value="{$sitemap_cate_id}" />
+		{/notempty}
+		<button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">立即提交</button>
+		<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	</div>
+</form>
+{/block}
+<!-- /主体 -->
+
+<!-- 脚本 -->
+{block name="script"}
+<script>
+	function init(layui) {
+		var form = layui.form,
+			layer = layui.layer,
+			upload = layui.upload;
+
+		//pc端图片
+		var uploadInst = upload.render({
+			elem: '#test1',
+			url: '/admin/api/upload',
+			done: function (res) {
+				//如果上传失败
+				if (res.code == 1) {
+					return layer.msg('上传失败');
+				}
+				//上传成功
+				$('#demo1 input').attr('value', res.data.id);
+				$('#demo1 img').attr('src', res.data.filepath);
+			}
+		});
+		//移动端图片
+		var uploadInst2 = upload.render({
+			elem: '#test2',
+			url: '/admin/api/upload',
+			done: function (res) {
+				//如果上传失败
+				if (res.code == 1) {
+					return layer.msg('上传失败');
+				}
+				//上传成功
+				$('#demo2 input').attr('value', res.data.id);
+				$('#demo2 img').attr('src', res.data.filepath);
+			}
+		});
+
+		//监听提交
+		form.on('submit(webform)', function (data) {
+			$.ajax({
+				url: "/admin/sitemap/sitemap_info_add",
+				type: 'post',
+				data: data.field,
+				success: function (e) {
+					layer.msg(e.msg);
+					if (e.code == 0) {
+						parent.tableIns.reload();
+						setTimeout(function(){
+							parent.layui.rightpage.close();
+						},1000);
+					}
+				}
+			})
+			return false;
+		});
+	}
+</script>
+{include file="common/layui" base="base" extend="[]" callback="init" /}
+{/block}
+<!-- /脚本 -->

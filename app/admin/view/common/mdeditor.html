@@ -1,0 +1,51 @@
+	<link rel="stylesheet" href="{__STATIC__}/mdeditor/css/editormd.min.css?v=1.0.2">
+	<script src="{__STATIC__}/mdeditor/editormd.min.js"></script>
+	<script type="text/javascript">
+		var editormdId='[id]';
+		var editormdMarkdown='[markdown]';
+		var editormdSub='[sub]';
+		var toolbarArray=[toolbar];
+		var editormdToolbar=[
+					"undo", "redo", "|", 
+					"bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|", 
+					"h1", "h2", "h3", "h4", "h5", "h6", "|", 
+					"list-ul", "list-ol", "hr", "|",
+					"link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "html-entities", "pagebreak", "|",
+					"goto-line", "watch", "preview", "fullscreen", "clear", "search", "|",
+					"help"
+				];
+		if(toolbarArray && toolbarArray.length>0){
+			editormdToolbar=toolbarArray;
+		}
+		var indexMarkdownEditor;
+		indexMarkdownEditor = editormd(editormdId, {
+			placeholder : "此处开始编写您要发布的内容...",//这里不设置则为默认的
+			path : '/static/mdeditor/lib/',
+			height           : window.innerHeight-editormdSub,
+			markdown         : document.getElementById(editormdMarkdown).value,
+			htmlDecode       : "style,script,iframe",
+			imageUpload: true,
+			imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+			imageUploadURL: "/admin/api/md_upload",		
+			saveHTMLToTextarea : true,//保存html到textarea
+			toolbarIcons : function() {
+				return editormdToolbar;
+			}, 
+			lang:{
+				dialog:{
+					preformattedText:{placeholder : "此处编写代码..."},
+					codeBlock:{placeholder : "此处编写代码...."}
+				}
+			},
+			onfullscreen : function() {
+				this.editor.css("z-index", 120);
+			},
+			onfullscreenExit : function() {
+				this.editor.css({
+					zIndex : 10,
+					border : "none",
+				});			
+				this.resize();
+			}
+		});
+	</script>

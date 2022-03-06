@@ -1,0 +1,59 @@
+
+.index{width:100%;margin-top: 60px;}
+.intro{ width:100%; height:660px; position: relative; background: url(../images/banner_1.png) no-repeat center 0;}
+.intro-box{ width: 1226px; margin: 0 auto;padding: 60px 0; font-size: 18px; color: #fff; font-weight: 100;}
+.intro-img{width: 518px; position: absolute; bottom:0; left:0;}
+.intro-img img{width: 100%;}
+.intro-info{ line-height: 2.4;}
+.intro-title{font-size: 42px;color: #fff; margin: 10px 0;}
+.intro-ops{text-align: center;padding: 60px 0;}
+.cms-download a{width: 268px; line-height: 66px; font-size: 20px; display: inline-block; background-color: #EB4336; color: #fff; border-radius: 4px;}
+.cms-download a:hover{opacity: .9;}
+.cms-version{padding: 32px 0; font-size: 14px;}
+.cms-version a{color:#fff; margin: 0 10px;}
+.cms-other a{border: 1px solid #77a5e8; color:#b6d5ff; font-size: 14px; padding: 6px 20px; margin: 0 20px; border-radius: 3px;}
+.cms-other a:hover{color: #fff; border-color: #fff;}
+
+.advantage {background:#f2f2f2; width: 100%; text-align: center; padding: 80px 0; font-weight: 100;}
+.advantage-title{font-size: 42px; font-weight: 500; text-align: center;}
+.advantage-sub-title{font-size: 18px; padding: 20px 0; line-height:1.8; text-align:center;}
+.item-wrap{display: flex; padding-top: 36px; justify-content: center;align-items: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center; 
+}
+.advantage-item { width: 282px; font-size: 16px; line-height: 1.5; margin:0 12px; word-wrap: break-word;}
+
+.feature {display: block;background: #fff; padding: 36px 20px 20px; margin: 0 0 10px;border-radius: 8px;text-align: center;}
+.feature:hover { background-color: #4385F5; background: linear-gradient(to left, #4385F5, #00aaff); color: #fff; }  
+.feature .part-icon {display: inline-block;border-radius: 100%;background: #f5f5f5; padding: 25px;width: 60px; height: 60px;}
+.part-text h3 {color: #333;font-weight: normal; text-align: center;font-size:18px; padding: 10px 0;}
+.part-text {text-align: left; line-height: 1.6;font-size: 14px; color: #888; padding: 10px 0;}
+.feature:hover .part-text h3,.feature:hover .part-text {color: #fff;}
+.part-icon img { width: 60px;height: 60px;}
+
+.cms-banner{width:100%; height:120px; background-color:#4385F5}
+.blog {width: 1220px;margin: auto; padding: 30px 0; color: rgba(255,255,255,0.9);overflow: hidden;}
+.blog img {display: block; float: left; height: 60px; margin-right: 2px;}
+.blog span { display: block; float: left; line-height: 60px; margin-right:45px; font-size: 28px; font-weight: 100;}
+.blog ul { overflow: hidden;  float: left; margin-right:45px;}
+.blog ul li {font-size: 16px; padding: 5px 0;font-weight: 100;}
+.blog a {float: right;display: block; margin-top: 12px; padding: 6px 24px 7px; border: solid 2px #ed5d18; border-radius: 100px; background: #ed5d18; color: #fff; font-size: 16px; }
+
+.function {background:#f2f2f2; width: 100%; text-align: center; padding: 80px 0;}
+.function-title{font-size: 42px; font-weight: 500; text-align: center; font-weight: 100;}
+.function-sub-title{font-size: 18px; padding: 20px 0 160px; line-height:1.8;  font-weight: 100; text-align: left; width:1220px; margin:0 auto;}
+.function-wrap{width:1220px;position: relative; margin:0 auto; background-color: #fff; padding:180px 0 30px;  border-radius: 10px;  box-shadow: 0 0 10px rgb(0 0 0 / 10%);}
+.function-img{width: 100%;position: absolute; top: -96px;}
+.function-main{display: flex;  justify-content: center; padding: 30px;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center; 
+}
+
+.function-item { width: 282px; font-size: 15px; line-height: 1.5; margin:0 12px; word-wrap: break-word;}
+.item-box{padding: 20px 0; background-color: #4385F5; background: linear-gradient(to left, #4385F5, #00aaff); border-radius: 8px; color: #fff;margin-bottom: 10px;}
+.function-item  ul li { width: 44%; float: left; padding:5px 3%; text-align: left; font-weight: 100;}
+.function-item  ul li span{font-size: 16px; color: #4385F5; font-weight: 800; margin-right: 3px;}
+.item-box h3{font-size: 18px; font-weight: 100; padding-top:10px;}
+.item-box img{height:80px;}

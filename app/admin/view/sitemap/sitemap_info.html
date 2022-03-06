@@ -1,0 +1,117 @@
+{extend name="common/base"/}
+<!-- 主体 -->
+{block name="body"}
+<div class="body-table" style="margin-bottom:0;">
+	<table class="layui-hide" id="test" lay-filter="test"></table>
+</div>
+
+<script type="text/html" id="status">
+	<i class="layui-icon {{#  if(d.status == 1){ }}layui-icon-ok{{#  } else { }}layui-icon-close{{#  } }}"></i>
+</script>
+<script type="text/html" id="toolbarDemo">
+  <div class="layui-btn-container">
+	<button class="layui-btn layui-btn-normal layui-btn-sm add-menu">+ 添加网站地图</button>
+	<button class="layui-btn layui-btn-primary layui-btn-sm add-back">返回</button>
+  </div>
+</script>
+<script type="text/html" id="barDemo">
+<div class="layui-btn-group"><button class="layui-btn layui-btn-xs" lay-event="edit">编辑</button><button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</button></div>
+</script>
+{/block}
+<!-- /主体 -->
+
+<!-- 脚本 -->
+{block name="script"}
+<script>
+	var sitemap_cate_id = '{$sitemap_cate_id}',tableIns = null;
+	function init(layui) {
+		var table = layui.table,
+			rightpage = layui.rightpage,
+			form = layui.form;
+
+		tableIns = table.render({
+			elem: '#test',
+			title: '网站地图列表',
+			toolbar: '#toolbarDemo',
+			url: '/admin/sitemap/sitemap_info', //数据接口
+			where: {
+				id: sitemap_cate_id
+			},
+			page: false, //开启分页
+			cols: [
+				[
+					{
+						field: 'id',
+						title: 'ID号',
+						align: 'center',
+						width: 80
+					}, {
+						field: 'sort',
+						title: '排序',
+						width: 80,
+						align: 'center'
+					}, {
+						field: 'name',
+						title: '标题',
+						width: 200
+					}, {
+						field: 'pc_src',
+						title: 'pc端链接'
+					}, {
+						field: 'mobile_src',
+						title: '移动端链接'
+					}, {
+						field: 'right',
+						title: '操作',
+						toolbar: '#barDemo',
+						width: 100,
+						align: 'center'
+					}
+				]
+			]
+		});
+
+		//表头工具栏事件
+		$('.add-menu').on('click',function(){
+			rightpage.open("/admin/sitemap/sitemap_info_add?cid="+sitemap_cate_id,'900px');
+			return;
+		});
+		
+		//监听返回
+		$('.add-back').on('click',function () {
+			history.back(-1);
+			return false;
+		});
+		//监听行工具事件
+		table.on('tool(test)', function (obj) {
+			var data = obj.data;
+			if (obj.event === 'edit') {
+				rightpage.open('/admin/sitemap/sitemap_info_add?id='+obj.data.id,'900px');
+				return;
+			}
+			if (obj.event === 'del') {
+				layer.confirm('确定要删除该数据吗？', {
+					icon: 3,
+					title: '提示'
+				}, function (index) {
+					$.ajax({
+						url: "/admin/sitemap/sitemap_info_delete",
+						data: {
+							id: data.id
+						},
+						success: function (res) {
+							layer.msg(res.msg);
+							if (res.code == 0) {
+								obj.del();
+							}
+						}
+					})
+					layer.close(index);
+				});
+			}
+		});
+	}
+</script>
+{include file="common/layui" base="base" extend="['rightpage']" callback="init" /}
+{/block}
+<!-- /脚本 -->

@@ -1,0 +1,97 @@
+{extend name="common/base"/}
+<!-- 主体 -->
+{block name="body"}
+<form class="layui-form page-content">
+	<h3 style="height:36px">微信配置</h3>
+	<table class="layui-table layui-table-form">
+		<tr>
+			<td class="layui-td-gray3">token<font>*</font></td>
+			<td>				
+				<input type="hidden" value="{$id}" name="id">
+				<input type="text" name="token" lay-verify="required" autocomplete="off" placeholder="请输入Token" class="layui-input" {notempty name="$config.token"} value="{$config.token}" {/notempty}>
+			</td>
+			<td class="layui-td-gray3">登录回调地址<font>*</font></td>
+			<td>
+				<input type="text" name="login_back_url" lay-verify="required" autocomplete="off" placeholder="请输入微信登录回调地址" class="layui-input" {notempty name="$config.login_back_url"} value="{$config.login_back_url}" {/notempty}>
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray3">公众号appid<font>*</font></td>
+			<td>
+				<input type="text" name="appid" lay-verify="required" autocomplete="off" placeholder="请输入appID" class="layui-input" {notempty name="$config.appid"} value="{$config.appid}" {/notempty}>
+			</td>
+			<td class="layui-td-gray3">公众号appsecret<font>*</font></td>
+			<td>
+				<input type="text" name="appsecret" lay-verify="required" autocomplete="off" placeholder="请输入secretey" class="layui-input" {notempty name="$config.appsecret"} value="{$config.appsecret}" {/notempty}>
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray3">支付商户号</td>
+			<td>
+				<input type="text" name="mchid" autocomplete="off" placeholder="请输入微信支付商户号" class="layui-input" {notempty name="$config.mchid"} value="{$config.mchid}" {/notempty}>
+			</td>
+			<td class="layui-td-gray3">支付API密钥</td>
+			<td>
+				<input type="text" name="secrect_key" autocomplete="off" placeholder="请输入微信支付API密钥" class="layui-input"
+				{notempty name="$config.secrect_key"} value="{$config.secrect_key}" {/notempty}>
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray3">支付证书路径</td>
+			<td>
+				<input type="text" name="cert_url" autocomplete="off" placeholder="请输入微信支付证书路径" class="layui-input"
+				{notempty name="$config.cert_url"} value="{$config.cert_url}" {/notempty}>
+			</td>
+			<td class="layui-td-gray3">支付回调地址</td>
+			<td>
+				<input type="text" name="pay_back_url" autocomplete="off" placeholder="请输入微信支付回调地址" class="layui-input" {notempty name="$config.pay_back_url"} value="{$config.pay_back_url}" {/notempty}>
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray3">小程序appid<font>*</font></td>
+			<td>
+				<input type="text" name="xcx_appid" lay-verify="required" autocomplete="off" placeholder="请输入小程序appid" class="layui-input" {notempty name="$config.xcx_appid"} value="{$config.xcx_appid}" {/notempty}>
+			</td>
+			<td class="layui-td-gray3">小程序appsecret<font>*</font></td>
+			<td>
+				<input type="text" name="xcx_appsecret" lay-verify="required" autocomplete="off" placeholder="请输入小程序appsecret" class="layui-input" {notempty name="$config.xcx_appsecret"} value="{$config.xcx_appsecret}" {/notempty}>
+			</td>
+		</tr>
+	</table>
+	<div style="padding: 10px 0">
+		<button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">立即提交</button>
+		<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	</div>
+</form>
+{/block}
+<!-- /主体 -->
+
+<!-- 脚本 -->
+{block name="script"}
+<script>
+	function init(layui) {
+		var form = layui.form,
+			layer = layui.layer;
+
+		//监听提交
+		form.on('submit(webform)', function (data) {
+			$.ajax({
+				url: "/admin/conf/edit",
+				type: 'post',
+				data: data.field,
+				success: function (e) {
+					layer.msg(e.msg);
+					if (e.code == 0) {
+						setTimeout(function(){
+							parent.layui.rightpage.close();
+						},1000);
+					}
+				}
+			})
+			return false;
+		});
+	}
+</script>
+{include file="common/layui" base="base" extend="[]" callback="init" /}
+{/block}
+<!-- /脚本 -->

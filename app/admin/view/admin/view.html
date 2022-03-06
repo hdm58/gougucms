@@ -1,0 +1,122 @@
+{extend name="common/base"/}
+{block name="style"}
+<style>
+.checkbox16 .layui-form-checkbox span{font-size:15px;font-weight:800;}
+.layui-checkbox-disabled span,.layui-checkbox-disabled[lay-skin=primary] span{color: #666666!important;}
+</style>
+{/block}
+<!-- 主体 -->
+{block name="body"}
+<form class="layui-form body-table">
+	<h3 style="font-weight:600; padding:10px">管理员信息</h3>
+	<table class="layui-table layui-table-form">
+		<tr>
+			<td class="layui-td-gray2">登录账号</td>
+			<td>
+				{$admin.username}
+			</td>
+			<td class="layui-td-gray2">用户名</td>
+			<td>
+				{$admin.nickname}
+			</td>
+			<td rowspan="2" class="layui-td-gray2">头像</td>
+			<td rowspan="2" valign="top" style="width: 100px;">
+				<div class="layui-upload">
+					<img src="{$admin.thumb}" width="100" height="100" />
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray2">手机号码</td>
+			<td>
+				{$admin.mobile}
+			</td>
+			<td class="layui-td-gray2">状态</td>
+			<td>
+				{eq name="$admin.status" value="1" }正常{/eq}
+				{eq name="$admin.status" value="0" }禁止登录{/eq}
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray2">用户角色<font>*</font>
+			</td>
+			<td colspan="5">
+				{volist name=":get_admin_group()" id="v"}
+				{volist name="$admin.group_id" id="a"}{eq name="$a" value="$v.id" }{$v.title},{/eq}{/volist}
+				{/volist}
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray2">最后登录时间</td>
+			<td>
+				{$admin.last_login_time | date='Y-m-d H:i:s'}
+			</td>
+			<td class="layui-td-gray2">最后登录IP</td>
+			<td>
+				{$admin.last_login_ip}
+			</td>
+			<td class="layui-td-gray2">累计登录次数</td>
+			<td>
+				{$admin.login_num}
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray2">备注</td>
+			<td colspan="5">
+				{$admin.desc}
+			</td>
+		</tr>
+	</table>
+	<h3 class="h3-title2">用户权限</h3>
+	<table class="layui-table layui-table-form">
+		{volist name="role_rule" id="vo"}
+		<tr>
+			<td style="font-weight:800">
+			  <input type="checkbox" disabled value="{$vo.id}" title="{$vo.title}" {eq name="$vo.checked" value="true" }checked{/eq}>
+			</td>
+			{notempty name="vo.children"}
+				<td>
+					<div style="padding:0 0 0 10px;">
+					{volist name="vo.children" key="k" id="voo"}
+						<div class="checkbox16" style="padding:10px 0;">
+							<input type="checkbox" disabled lay-filter="rule" name="rule[]" value="{$voo.id}" lay-skin="primary" title="{$voo.title}" {eq name="$voo.checked" value="true" }checked{/eq}>
+						</div>
+						{notempty name="voo.children"}
+							<div style="padding:0 0 3px; {if condition='$k != count($vo.children)'}margin-bottom:3px; padding-bottom:16px; border-bottom:1px solid #eee;{/if}">
+							{volist name="voo.children" id="vooo"}
+								<div class="layui-input-inline" style="margin-right:10px;">
+									<input type="checkbox" disabled data-rule="{$voo.id}" name="rule[]" value="{$vooo.id}" lay-skin="primary" title="{$vooo.title}" {eq name="$vooo.checked" value="true" }checked{/eq}>
+								</div>
+							{/volist}
+							</div>
+						{/notempty}
+					{/volist}
+					</div>
+				</td>
+			{/notempty}
+		</tr>
+		{/volist}
+	</table>
+	<div style="padding: 10px">
+		<button lay-event="back" class="layui-btn layui-btn-primary">关闭</button>
+	</div>
+</form>
+{/block}
+<!-- /主体 -->
+
+<!-- 脚本 -->
+{block name="script"}
+<script>
+	function init(layui) {
+		var TAB = parent.layui.tab,
+			form = layui.form;
+		//监听返回
+		$('.body-table').on('click', '[lay-event="back"]', function () {
+			TAB.sonDelete();
+			return false;
+		});
+	}
+</script>
+{include file="common/layui" base='base' extend="[]" callback="init" /}
+{/block}
+<!-- /脚本 -->

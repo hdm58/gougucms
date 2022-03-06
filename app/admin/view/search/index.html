@@ -1,0 +1,100 @@
+{extend name="common/base"/}
+<!-- 主体 -->
+{block name="body"}
+<div class="body-table">
+	<form class="layui-form layui-form-bar">
+		<div class="layui-input-inline" style="width:300px;">
+			<input type="text" name="keywords" placeholder="关键字名称" class="layui-input" autocomplete="off" />
+		</div>
+		<button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">提交搜索</button>
+	</form>
+	<table class="layui-hide" id="test" lay-filter="test"></table>
+</div>
+
+{/block}
+<!-- /主体 -->
+
+<!-- 脚本 -->
+{block name="script"}
+<script>
+	function init(layui) {
+		var table = layui.table,
+			form = layui.form;
+
+		var tableIns = table.render({
+			elem: '#test',
+			title: '关键字搜索列表',
+			toolbar: '#toolbarDemo',
+			url: '/admin/search/index',
+			page: true, //开启分页
+			limit: 20,
+			cols: [
+				[{
+					field: 'id',
+					width: 90,
+					title: 'ID号',
+					align: 'center'
+				}, {
+					field: 'title',
+					title: '关键字名称'
+				}, {
+					field: 'times',
+					width: 100,
+					title: '搜索次数',
+					align: 'center'
+				}, {
+					width: 80,
+					title: '操作',
+					align: 'center',
+					templet: function (d) {
+						var html = '';
+						var delBtn = '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
+						return delBtn;
+					}
+				}]
+			]
+		});
+
+		//监听搜索提交
+		form.on('submit(webform)', function (data) {
+			tableIns.reload({
+				where: {
+					keywords: data.field.keywords
+				},
+				page: {
+					curr: 1
+				}
+			});
+			return false;
+		});
+
+
+		//删除
+		table.on('tool(test)', function (obj) {
+			if (obj.event === 'del') {
+				layer.confirm('确定要删除吗?', {
+					icon: 3,
+					title: '提示'
+				}, function (index) {
+					$.ajax({
+						url: "/admin/search/delete",
+						type: 'post',
+						data: {
+							id: obj.data.id
+						},
+						success: function (e) {
+							layer.msg(e.msg);
+							if (e.code == 0) {
+								obj.del();
+							}
+						}
+					})
+					layer.close(index);
+				});
+			}
+		});
+	}
+</script>
+{include file="common/layui" base="base" extend="[]" callback="init" /}
+{/block}
+<!-- /脚本 -->

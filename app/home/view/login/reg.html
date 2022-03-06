@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="renderer" content="webkit" />
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>{:get_system_config('web','admin_title')}</title>	
+	<style type="text/css">
+		html,
+		body {
+			width: 100%;
+			height: 100%;
+			background: #34a853;
+			margin: 0;
+			padding: 0;
+			border: 0;
+		}
+
+		div,p {
+			margin: 0;
+			padding: 0;
+			border: 0;
+		}
+
+		input:-webkit-autofill {
+			-webkit-box-shadow: 0 0 0px 1000px white inset;
+		}
+
+		#container {
+			width: 100%;
+			height: 100%;
+			position: fixed;
+			top: 0;
+			left: 0;
+			z-index: 999;
+			overflow: hidden;
+			background: url({__ADMIN_IMG__}/bg.jpg);
+			background-size: cover;
+			background: url("{__ADMIN_IMG__}/bg_pattern.png"),
+			-webkit-linear-gradient(to left, #34a853, #4285f4);
+			/* Chrome 10-25, Safari 5.1-6 */
+			background: url("{__ADMIN_IMG__}/bg_pattern.png"),
+			linear-gradient(to left, #34a853, #4285f4);
+			/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+		}
+
+		.login {
+			width: 872px;
+			height: 492px;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			margin-top: -258px;
+			margin-left: -436px;
+			border-radius: 12px;
+			background-color: #fff;
+			box-shadow: 0 2px 6px rgba(26, 26, 26, .36);
+			display: -webkit-flex;
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			flex-wrap: nowrap;
+		}
+
+		.login-img {
+			width: 420px;
+			border-radius: 12px 0 0 12px;
+		}
+
+		.right-wrap {
+			flex: 1;
+			height: 100%;
+			position: relative;
+			box-sizing: border-box;
+			text-align: center;
+		}
+
+		.right-wrap .login-logo {
+			padding: 25px 0 20px;			
+		}
+
+		.login-logo img{
+			height:60px;
+		}
+
+		.login-way>span {
+			display: inline-block;
+			padding: 0;
+			color: #999999;
+			font-size: 16px;
+			cursor: pointer;
+			margin: 0 20px;
+		}
+		.login-way{
+			height:36px;
+		}
+		.login-way>span:after {
+			content: "";
+			display: block;
+			width: 36px;
+			height: 3px;
+			margin: 6px auto 0;
+		}
+
+		.login-way .active {
+			color: #1a1a1a;
+		}
+
+		.login-way .active:after {
+			background: #EB3F3B;
+		}
+		.form-item{width: 326px; padding: 5px 50px;}
+
+
+		.login-input {
+			width: 100%;
+			height: 40px;
+			text-indent: 10px;
+			border: 1px solid #ddd;
+		}
+		.login-input:hover {
+			border-color: #4385F5;
+		}
+		.login-input:focus {
+		border-color:#4385F5;
+		border-right-width: 1px !important;
+		outline: 0;
+		-webkit-box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+				box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+		}
+		.captcha_img img {
+			width:172px;
+			cursor: pointer;
+		}
+
+		.login-btn {
+			width: 100%;
+			height: 44px;
+			font-size: 16px;
+			margin-top: 5px;
+			color: #fff;
+			cursor: pointer;
+			border:1px solid #4285f4;
+			background-color: #4285f4;
+		}
+		.login-btn:focus {
+		border-color:#4385F5;
+		border-right-width: 1px !important;
+		outline: 0;
+		}
+		.footer-operation{
+			padding:12px 0;
+			line-height: 2.4;
+			font-size: 14px;
+		}
+		.footer-operation a{
+			color: #4285f4;
+		}
+		.foot {
+			position: absolute;
+			font-size: 12px;
+			bottom: 28px;
+			text-align: center;
+			width: 100%;
+			color: #d3e8fa;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="container">
+		<div class="login">
+			<img src="{__IMG__}/login_img.png" class="login-img">
+			<div class="right-wrap">
+				<div class="login-logo"><a href="/"><img src="{__IMG__}/login_logo.png"></a></div>
+				<div class="login-wrap">
+					<div class="login-way">
+						<span class="active">帐号注册</span>
+					</div>
+					<div class="account-login">
+						<div class="form-box">
+							<form id="gouguLogin" autocomplete="off">
+								<div class="form-item">
+									<input type="text" name="username" placeholder="账户" autocomplete="new-text" class="login-input">
+								</div>
+								<div class="form-item">
+									<input type="password" name="pwd" placeholder="密码"
+										class="login-input" autocomplete="new-password">
+								</div>
+								<div class="form-item">
+									<input type="password" name="pwd_confirm" placeholder="重复密码" autocomplete="new-password" class="login-input">
+								</div>
+								<div class="form-item">
+									<div style="width:140px;display: inline;">
+										<input type="text" name="captcha" placeholder="验证码" autocomplete="new-text" 
+											class="login-input" style="width: 140px;">
+									</div>
+									<div class="captcha_img"
+										style="width:172px; height:42px; overflow: hidden; display: inline-block; margin-right:0; vertical-align: middle;">
+										{:captcha_img()}
+										<input type="hidden" value="{:make_token()}" />
+									</div>
+								</div>
+								<div class="form-item">
+									<button id="loginSubmit" type="button" class="login-btn">注册</button>
+								</div>
+							</form>
+							<div class="footer-operation">
+								<p>已有帐号？<a href="/home/login/index">立即登录</a></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="foot">
+			{:get_system_config('web','copyright')} <a id="beian" href="//www.beian.miit.gov.cn" target="_blank"
+				rel="nofollow" style="margin-left: 15px;color:#d3e8fa;">{:get_system_config('web','icp')}</a>，Powered by GouguCMS
+		</div>
+	</div>
+	<script language="javascript" src="{__STATIC__}/jquery.min.js"></script>
+	<script language="javascript" src="{__JS__}/layer/layer.js"></script>
+	<script type="text/javascript">
+		$('#loginSubmit').on('click', function () {
+			$.ajax({
+				url: "/home/login/reg_submit",
+				data: $('#gouguLogin').serialize(),
+				type: 'post',
+				async: false,
+				success: function (res) {
+					layer.msg(res.msg);
+					if (res.code === 0) {
+						setTimeout(function () {
+							window.location.href="{:url('/home/login/index')}";
+						}, 2000);
+					} else {
+						$('[alt="captcha"]').click();
+					}
+				}
+			})
+		});
+	</script>
+</body>
+
+</html>
